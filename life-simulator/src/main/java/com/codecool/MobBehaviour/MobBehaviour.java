@@ -1,4 +1,4 @@
-package com.codecool.Model.MobBehaviour;
+package com.codecool.MobBehaviour;
 
 public interface MobBehaviour {
 

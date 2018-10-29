@@ -1,4 +1,4 @@
-package com.codecool.Model.MobBehaviour;
+package com.codecool.MobBehaviour;
 
 public class HerbivoreBehaviour implements MobBehaviour{
 
@@ -9,7 +9,7 @@ public class HerbivoreBehaviour implements MobBehaviour{
 
     @Override
     public void reproduce() {
-        
+
     }
 
 }
