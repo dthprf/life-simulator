@@ -18,7 +18,9 @@ public class Board {
     }
 
     public void moveToPosition(MobData mobData, Point desiredPosition) {
+        board.get(mobData.getPosition()).remove(mobData);
         mobData.setPosition(desiredPosition);
+        board.get(desiredPosition).add(mobData);
     }
 
     public void spawnResource(Resource resource, Point point) {
