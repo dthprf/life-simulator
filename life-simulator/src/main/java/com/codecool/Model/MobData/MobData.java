@@ -8,11 +8,17 @@ public abstract class MobData {
 
     private int energy = 100;
     private Point position;
-    private int health = 3;
-    private int speed = 10;
-    private int damage = 1;
+    int health = 3;
+    int speed = 10;
+    int damage = 1;
     private String breed;
     private List<String> foodList;
+
+    public MobData(Point position, String breed, List<String> foodList) {
+        this.position = position;
+        this.breed = breed;
+        this.foodList = foodList;
+    }
 
     public int getEnergy() {
         return energy;

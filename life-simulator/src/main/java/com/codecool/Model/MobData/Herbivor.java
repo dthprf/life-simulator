@@ -6,7 +6,10 @@ import java.util.List;
 
 public class Herbivor extends MobData{
 
-    public Herbivor(Point position, int health, int speed, int damage, String breed, List<String> foodList) {
-        super(position, health, speed, damage, breed, foodList);
+    public Herbivor(Point position, String breed, List<String> foodList) {
+        super(position, breed, foodList);
+        this.health += 5;
+        this.damage += 2;
+        this.speed += 3;
     }
 }
