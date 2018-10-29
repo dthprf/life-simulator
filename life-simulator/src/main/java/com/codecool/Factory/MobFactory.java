@@ -18,25 +18,26 @@ public class MobFactory {
     }
 
     public void spawnMob(int number, String type) {
-        
+
     }
 
     public void spawnMob(Point coordinates, int health) {
 
     }
 
-    private Point drawCoordinates() {
+    private Point drawCoordinatesForMob() {
+        boolean areCoordinatesCorrect = false;
+        Point coordinates = null;
         int maxY = board.getHeight();
         int maxX = board.getWidth();
 
-        int randomY = ThreadLocalRandom.current().nextInt(1, maxY);
-        int randomX = ThreadLocalRandom.current().nextInt(1, maxX);
+        while(!areCoordinatesCorrect) {
+            int randomY = ThreadLocalRandom.current().nextInt(0, maxY);
+            int randomX = ThreadLocalRandom.current().nextInt(0, maxX);
+            coordinates = new Point(randomX, randomY);
+            areCoordinatesCorrect = board.isPointAvailableForMob(coordinates);
+        }
 
-
-
-    }
-
-    private boolean isCoordinateOcupied(Point point) {
-
+        return coordinates;
     }
 }
