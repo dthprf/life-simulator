@@ -1,5 +1,7 @@
 package com.codecool.Model;
 
+import com.codecool.Model.MobData.MobData;
+
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +18,7 @@ public class Board {
     }
 
     public void moveToPosition(MobData mobData, Point desiredPosition) {
-        mobData.setPoint(desiredPosition);
+        mobData.setPosition(desiredPosition);
     }
 
     public void spawnResource(Resource resource, Point point) {
