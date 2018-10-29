@@ -4,9 +4,9 @@ import com.codecool.Model.Point;
 
 import java.util.List;
 
-public class Herbivor extends MobData{
+public class Herbivore extends MobData{
 
-    public Herbivor(Point position, String breed, List<String> foodList) {
+    public Herbivore(Point position, String breed, List<String> foodList) {
         super(position, breed, foodList);
         this.health += 5;
         this.damage += 2;
