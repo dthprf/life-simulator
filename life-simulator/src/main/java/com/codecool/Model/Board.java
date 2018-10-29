@@ -4,6 +4,7 @@ import com.codecool.Model.MobData.MobData;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Board {
 
@@ -31,7 +32,14 @@ public class Board {
 
     public boolean isPointAvailableForMob(Point point) {
         List<Object> occupants = board.get(point);
-        return  occupants.isEmpty();
+        return occupants.isEmpty();
+    }
+
+    public Point getRandomPoint() {
+        Random random = new Random();
+        int x = random.nextInt(getWidth());
+        int y = random.nextInt(getHeight());
+        return new Point(x, y);
     }
 
     public Map getBoard() {
