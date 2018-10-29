@@ -29,6 +29,11 @@ public class Board {
         board.put(point, location);
     }
 
+    public boolean isPointAvailableForMob(Point point) {
+        List<Object> occupants = board.get(point);
+        return  occupants.isEmpty();
+    }
+
     public Map getBoard() {
         return board;
     }
