@@ -35,9 +35,7 @@ public class ResourceSpawner extends Thread {
 
     private void spawnResource() {
         Resource toSpawn = availableResources.get(random.nextInt(availableResources.size()));
-        int x = random.nextInt(board.getWidth());
-        int y = random.nextInt(board.getHeight());
-        Point spawnPoint = new Point(x, y);
+        Point spawnPoint = board.getRandomPoint();
         board.spawnResource(toSpawn, spawnPoint);
     }
 
