@@ -136,5 +136,10 @@ public class PredatorBehaviour implements MobBehaviour {
         return mobData.getBoard().getBoard().get(point);
     }
 
+    private PredatorAction proposeHunting(Point point, ComponentContainer container, int distance) {
+        MobData bestPray = chooseBestPray(container.getMobs());
+        return new PredatorAction(bestPray, distance, point);
+    }
 
+    
 }
