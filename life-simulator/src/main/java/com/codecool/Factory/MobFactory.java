@@ -24,21 +24,21 @@ public class MobFactory {
             case HERBIVORE_MOB:
                 for (int i = 0; i < number; i++) {
                     Point coordinates = board.getRandomPoint();
-                    board.spawnMob(new Herbivore(coordinates, HERBIVORE_MOB, this.board), coordinates);
+                    board.spawnMob(new Herbivore(drawCoordinates(), HERBIVORE_MOB, this.board), coordinates);
                 }
                 break;
 
             case PREDATOR_MOB:
                 for (int i = 0; i < number; i++) {
                     Point coordinates = board.getRandomPoint();
-                    board.spawnMob(new Predator(coordinates, PREDATOR_MOB, this.board), coordinates);
+                    board.spawnMob(new Predator(drawCoordinates(), PREDATOR_MOB, this.board), coordinates);
                 }
                 break;
 
             case SCAVENGER_MOB:
                 for (int i = 0; i < number; i++) {
                     Point coordinates = board.getRandomPoint();
-                    board.spawnMob(new Scavenger(coordinates, SCAVENGER_MOB, this.board), coordinates);
+                    board.spawnMob(new Scavenger(drawCoordinates(), SCAVENGER_MOB, this.board), coordinates);
                 }
                 break;
 
@@ -70,5 +70,17 @@ public class MobFactory {
             default:
                 throw new UnrecognizedMobBreedException(type + " is not available.");
         }
+    }
+
+    private Point drawCoordinates() {
+        boolean isCoordinateAvailable = false;
+        Point coordinates = null;
+
+        while (!isCoordinateAvailable) {
+            coordinates = board.getRandomPoint();
+            isCoordinateAvailable = board.isPointAvailableForMob(coordinates);
+        }
+
+        return coordinates;
     }
 }
