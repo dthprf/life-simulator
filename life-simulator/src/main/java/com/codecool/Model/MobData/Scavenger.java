@@ -8,5 +8,6 @@ public class Scavenger extends MobData {
         super(position, breed, board);
         this.damage += 3;
         this.speed += 7;
+        this.foodList = new String[]{"water", "carrion", "meat"};
     }
 }
