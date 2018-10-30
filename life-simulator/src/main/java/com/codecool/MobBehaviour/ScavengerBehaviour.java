@@ -23,7 +23,6 @@ public class ScavengerBehaviour implements MobBehaviour {
 
     @Override
     public void update() {
-        System.out.println("SCAVENGER UPDATE : " + mobData.getPosition().toString());
         validateTarget();
         if (target == null) {
             updateTarget();
