@@ -18,6 +18,7 @@ public class ScavengerBehaviour implements MobBehaviour {
     private final MobFactory factory;
     private final MobData mobData;
     private Point target;
+    private final int REQUIRED_ENERGY_TO_REPRODUCE = 120;
 
     public ScavengerBehaviour(MobFactory factory, MobData mobData) {
         this.factory = factory;
@@ -34,9 +35,14 @@ public class ScavengerBehaviour implements MobBehaviour {
             updateTarget();
         }
 
+        if (this.mobData.getEnergy() >= REQUIRED_ENERGY_TO_REPRODUCE) {
+            reproduce();
+        }
+
         if (target == null) {
-            if (predatorsAreNearby()) {
-                runAway();
+            List<Point> dangerPoints = predatorsNearby();
+            if (!dangerPoints.isEmpty()) {
+                handleDangerousSituation(dangerPoints);
             } else {
                 stayInPlace();
             }
@@ -49,19 +55,41 @@ public class ScavengerBehaviour implements MobBehaviour {
         }
     }
 
-    private void runAway() {
+    private void handleDangerousSituation(List<Point> dangerPoints) {
+        boolean attacked = attackWeakPredators(dangerPoints);
+        if (!attacked) {
+            runAway(dangerPoints);
+        }
     }
 
-    private boolean predatorsAreNearby() {
+    private boolean attackWeakPredators(List<Point> dangerPoints) {
+        int myDamage = mobData.getDamage();
+        boolean attacked = false;
+        for(Point point : dangerPoints) {
+            ComponentContainer container = mobData.getBoard().getBoard().get(point);
+            for (MobData otherMob : container.getMobs()) {
+                if (otherMob.getBreed().equalsIgnoreCase(this.mobData.getBreed())) {
+                    continue;
+                }
+                if (otherMob.getHealth() <= myDamage) {
+                    otherMob.dealDamage(myDamage);
+                    attacked = true;
+                    this.mobData.decreaseEnergy(2);
+                }
+            }
+        }
+        return attacked;
+    }
+
+    private List<Point> predatorsNearby() {
         Point currentPosition = mobData.getPosition();
         Board board = mobData.getBoard();
         int DANGER_ZONE = 1;
         List<Point> sightZone = board.adjacentPoints(currentPosition, DANGER_ZONE);
-        List<Point> dangerPoints = sightZone.stream()
+
+        return sightZone.stream()
                 .filter(p -> this.mobData.getBoard().getBoard().get(p).hasMobsOfType("predator"))
                 .collect(Collectors.toList());
-
-        return !dangerPoints.isEmpty();
     }
 
     private void eat() {
