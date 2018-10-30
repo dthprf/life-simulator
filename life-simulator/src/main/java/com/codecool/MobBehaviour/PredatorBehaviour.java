@@ -73,5 +73,26 @@ public class PredatorBehaviour implements MobBehaviour {
         }
     }
 
+    private PriorityQueue<PredatorAction> queueEfficientActions() {
+        List<Point> lineOfSight = mobData.getBoard().adjacentPoints(mobData.getPosition(), VIEW_DISTANCE);
+        PriorityQueue<PredatorAction> actionsQueue = new PriorityQueue<>(3,
+                (action1, action2) -> (action2.calculateEnergyIncome() - action1.calculateEnergyIncome()));
+
+        for (int i = 0; i < VIEW_DISTANCE; i++) {
+            List<Point> closestFields = getFieldsInRange(i, lineOfSight);
+
+            for (Point point : closestFields) {
+                if (!getComponent(point).getMobs().stream().filter(mob -> !mobData.getBreed().equals(mob.getBreed())).collect(Collectors.toList()).isEmpty()) {
+                    actionsQueue.offer(proposeHunting(point, getComponent(point), i));
+                }
+
+                if (!getComponent(point).getResources().isEmpty()) {
+                    actionsQueue.offer(proposeFoodCollecting(point, getComponent(point), i));
+                }
+            }
+        }
+        return actionsQueue;
+    }
+
 
 }
