@@ -36,6 +36,13 @@ public class ScavengerBehaviour implements MobBehaviour {
         }
     }
 
+    private void validateTarget() {
+        Point previousTarget = target;
+        target = null;
+        Board board = mobData.getBoard();
+        setTargetIfContainsFood(board, previousTarget);
+    }
+
 
     private void updateTarget() {
         Point currentPosition = mobData.getPosition();
