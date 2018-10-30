@@ -76,4 +76,8 @@ public abstract class MobData {
     public void setFoodList(String[] foodList) {
         this.foodList = foodList;
     }
+
+    public Board getBoard() {
+        return board;
+    }
 }
