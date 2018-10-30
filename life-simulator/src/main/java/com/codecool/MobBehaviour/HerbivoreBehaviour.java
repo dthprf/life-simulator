@@ -28,26 +28,53 @@ public class HerbivoreBehaviour implements MobBehaviour{
     }
 
     private void doAction(List<Point> reachZone, List<Point> sightZone) {
+        reachZone.remove(mobData.getPosition());
         List<Point> dangerPoints = getDangerPointsInSightZone(sightZone);
+        List<Point> sourcePoints = getResourcePointsInSightZone(sightZone);
+
+        if(!isSurroundingSafe(reachZone)) {
+            runAway();
+        }
+
         for(Point point: reachZone) {
-            if(dangerPoints.contains(point)) {
-                setDirection();
-            } else if(mobData.getBoard().getBoard().get(point).hasResourceOfType("water") ||
-                      mobData.getBoard().getBoard().get(point).hasResourceOfType("herb")) {
+            if(mobData.getBoard().getBoard().get(point).hasResourceOfType("water") ||
+                  mobData.getBoard().getBoard().get(point).hasResourceOfType("herb")) {
                 List<Resource> resources = mobData.getBoard().getBoard().get(point).getResources();
                 Resource resource = resources.stream()
                         .filter(r -> r.getName().equals("water") || r.getName().equals("herb"))
                         .findFirst().get();
                 collectResource(point, resource);
-                setDirection();
+                setDirection(point);
             } else {
-                setDirection();
+                setDirection(point);
             }
         }
     }
 
-    private void setDirection() {
+    private boolean isSurroundingSafe(List<Point> surrounding) {
+        for(Point point: surrounding) {
+            if(this.mobData.getBoard().getBoard().get(point)
+                    .hasResourceOfType("predator")) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    private void setDirection(Point point) {
+        List<Point> surrounding = mobData.getBoard().adjacentPoints(point, 1);
+        if(isSurroundingSafe(surrounding)) {
+
+        }
+    }
+
+    private List<Point> getResourcePointsInSightZone(List<Point> sightZone) {
+        List<Point> resourcePoints = sightZone.stream()
+                .filter(p -> (this.mobData.getBoard().getBoard().get(p).hasResourceOfType("water")
+                || this.mobData.getBoard().getBoard().get(p).hasResourceOfType("herb")))
+                .collect(Collectors.toList());
+
+        return resourcePoints;
     }
 
     private List<Point> getDangerPointsInSightZone(List<Point> sightZone) {
@@ -60,7 +87,7 @@ public class HerbivoreBehaviour implements MobBehaviour{
 
     private void collectResource(Point point, Resource resource) {
         this.mobData.getBoard().getBoard().get(point).removeResource(resource);
-        this.mobData.setEnergy(this.mobData.getEnergy() + resource.getEnergy());
+        this.mobData.increaseEnergy(resource.getEnergy());
     }
 
     @Override
