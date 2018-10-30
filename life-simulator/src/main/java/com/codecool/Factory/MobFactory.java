@@ -23,21 +23,21 @@ public class MobFactory {
         switch (type) {
             case HERBIVORE_MOB:
                 for (int i = 0; i < number; i++) {
-                    Point coordinates = drawCoordinatesForMob();
+                    Point coordinates = board.getRandomPoint();
                     board.spawnElement(coordinates, new Herbivore(coordinates, HERBIVORE_MOB));
                 }
                 break;
 
             case PREDATOR_MOB:
                 for (int i = 0; i < number; i++) {
-                    Point coordinates = drawCoordinatesForMob();
+                    Point coordinates = board.getRandomPoint();
                     board.spawnElement(coordinates, new Predator(coordinates, PREDATOR_MOB));
                 }
                 break;
 
             case SCAVENGER_MOB:
                 for (int i = 0; i < number; i++) {
-                    Point coordinates = drawCoordinatesForMob();
+                    Point coordinates = board.getRandomPoint();
                     board.spawnElement(coordinates, new Scavenger(coordinates, SCAVENGER_MOB));
                 }
                 break;
@@ -64,21 +64,5 @@ public class MobFactory {
             default:
                 throw new UnrecognizedMobBreedException(type + " is not available.");
         }
-    }
-
-    private Point drawCoordinatesForMob() {
-        boolean areCoordinatesCorrect = false;
-        Point coordinates = null;
-        int maxY = board.getHeight();
-        int maxX = board.getWidth();
-
-        while(!areCoordinatesCorrect) {
-            int randomY = ThreadLocalRandom.current().nextInt(0, maxY);
-            int randomX = ThreadLocalRandom.current().nextInt(0, maxX);
-            coordinates = new Point(randomX, randomY);
-            areCoordinatesCorrect = board.isPointAvailableForMob(coordinates);
-        }
-
-        return coordinates;
     }
 }
