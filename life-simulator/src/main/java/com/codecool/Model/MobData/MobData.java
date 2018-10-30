@@ -3,8 +3,6 @@ package com.codecool.Model.MobData;
 import com.codecool.Model.Board;
 import com.codecool.Model.Point;
 
-import java.util.List;
-
 public abstract class MobData {
 
     Board board;
@@ -14,12 +12,12 @@ public abstract class MobData {
     int speed = 10;
     int damage = 1;
     private String breed;
-    private List<String> foodList;
+    String[] foodList;
 
-    public MobData(Point position, String breed, List<String> foodList, Board board) {
+
+    public MobData(Point position, String breed, Board board) {
         this.position = position;
         this.breed = breed;
-        this.foodList = foodList;
         this.board = board;
     }
 
@@ -71,11 +69,11 @@ public abstract class MobData {
         this.breed = breed;
     }
 
-    public List<String> getFoodList() {
+    public String[] getFoodList() {
         return foodList;
     }
 
-    public void setFoodList(List<String> foodList) {
+    public void setFoodList(String[] foodList) {
         this.foodList = foodList;
     }
 }

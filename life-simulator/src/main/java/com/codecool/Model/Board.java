@@ -26,6 +26,10 @@ public class Board {
     public void spawnResource(Resource resource, Point point) {
         board.get(point).addResource(resource);
     }
+    
+    public void spawnElement(MobData mob, Point point) {
+        board.get(point).addMob(mob);
+    }
 
     public boolean isPointAvailableForMob(Point point) {
         return !board.get(point).hasMobs();
