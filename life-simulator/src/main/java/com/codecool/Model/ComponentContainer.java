@@ -59,4 +59,15 @@ public class ComponentContainer {
     public List<Resource> getResources() {
         return resources;
     }
+
+    public String asChar() {
+        if (mobs.isEmpty() && resources.isEmpty()) {
+            return " ";
+        }
+        if (!resources.isEmpty()) {
+            return String.valueOf(resources.get(0).getName().charAt(0)).toLowerCase();
+        } else {
+            return String.valueOf(mobs.get(0).getBreed().charAt(0)).toUpperCase();
+        }
+    }
 }
