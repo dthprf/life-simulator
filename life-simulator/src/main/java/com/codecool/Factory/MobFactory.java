@@ -71,4 +71,16 @@ public class MobFactory {
                 throw new UnrecognizedMobBreedException(type + " is not available.");
         }
     }
+
+    private Point drawCoordinates() {
+        boolean isCoordinateAvailable = false;
+        Point coordinates = null;
+
+        while (!isCoordinateAvailable) {
+            coordinates = board.getRandomPoint();
+            isCoordinateAvailable = board.isPointAvailableForMob(coordinates);
+        }
+
+        return coordinates;
+    }
 }
