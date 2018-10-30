@@ -7,7 +7,6 @@ import com.codecool.Model.ComponentContainer;
 import com.codecool.Model.MobData.MobData;
 import com.codecool.Model.Point;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ScavengerBehaviour implements MobBehaviour {
@@ -38,6 +37,25 @@ public class ScavengerBehaviour implements MobBehaviour {
         }
     }
 
+    private void moveTowardsTarget() {
+        int nextX = mobData.getPosition().getX();
+        int nextY = mobData.getPosition().getY();
+        if (nextX < target.getX()) {
+            nextX++;
+        } else if (nextX > target.getX()) {
+            nextX--;
+        }
+
+        if (nextY < target.getY()) {
+            nextY++;
+        } else if (nextY > target.getY()) {
+            nextY--;
+        }
+
+        Point nextPosition = new Point(nextX, nextY);
+        mobData.getBoard().moveToPosition(mobData, nextPosition);
+    }
+
     private void stayInPlace() {
         mobData.decreaseEnergy(1);
     }
@@ -54,7 +72,7 @@ public class ScavengerBehaviour implements MobBehaviour {
         Point currentPosition = mobData.getPosition();
         Board board = mobData.getBoard();
         List<Point> sightZone = board.adjacentPoints(currentPosition, SIGHT_RANGE);
-        for(Point point : sightZone) {
+        for (Point point : sightZone) {
             if (target != null) {
                 break;
             }
