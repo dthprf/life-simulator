@@ -44,19 +44,26 @@ public class ResourceSpawner extends Thread {
         Resource herb = new Resource(5, "herb");
         Resource carrion = new Resource(7, "carrion");
         Resource meat = new Resource(10, "meat");
+        Resource water = new Resource(20, "water");
 
-        // herb has ~63% chance of spawning
+        // herb has ~42% chance of spawning
         resources.add(herb);
         resources.add(herb);
         resources.add(herb);
         resources.add(herb);
         resources.add(herb);
+
+        // water has ~25% chance of spawning
+        resources.add(water);
+        resources.add(water);
+        resources.add(water);
 
         // carrion has ~25% chance of spawning
         resources.add(carrion);
         resources.add(carrion);
+        resources.add(carrion);
 
-        // meat has ~13% chance of spawning
+        // meat has ~8% chance of spawning
         resources.add(meat);
 
         return resources;
