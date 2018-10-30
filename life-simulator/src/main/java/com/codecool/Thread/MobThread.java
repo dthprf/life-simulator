@@ -2,6 +2,7 @@ package com.codecool.Thread;
 
 import com.codecool.Factory.ResourceSpawner;
 import com.codecool.MobBehaviour.MobBehaviour;
+import com.codecool.Model.Board;
 import com.codecool.Model.MobData.MobData;
 import com.codecool.Model.Point;
 
@@ -28,11 +29,20 @@ public class MobThread implements Runnable {
                 return;
             }
         }
+        System.out.println("MOB DIED " + mobData.getBreed());
         if (diedDueToDamage()) {
             spawnMeat();
         } else if (diedDueToLackOfFood()) {
             spawnCarrion();
         }
+
+        removeDataFromBoard();
+    }
+
+    private void removeDataFromBoard() {
+        Board board = mobData.getBoard();
+        Point position = mobData.getPosition();
+        board.getBoard().get(position).removeMob(mobData);
     }
 
     private boolean diedDueToLackOfFood() {
