@@ -128,5 +128,9 @@ public class PredatorBehaviour implements MobBehaviour {
         return availablePoints.get(new Random().nextInt(availablePoints.size()));
     }
 
+    private void stayInPosition() {
+        mobData.decreaseEnergy(1);
+    }
+
 
 }
