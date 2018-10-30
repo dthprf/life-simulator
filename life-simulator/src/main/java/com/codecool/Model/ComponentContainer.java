@@ -26,8 +26,8 @@ public class ComponentContainer {
         resources.add(resource);
     }
 
-    public synchronized void removeResource(Resource resource) {
-        resources.add(resource);
+    public synchronized boolean removeResource(Resource resource) {
+        return resources.remove(resource);
     }
 
     public boolean hasMobs() {
