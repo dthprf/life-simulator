@@ -37,7 +37,6 @@ public class ResourceSpawner extends Thread {
         Resource toSpawn = availableResources.get(random.nextInt(availableResources.size()));
         Point spawnPoint = board.getRandomPoint();
         board.spawnResource(toSpawn, spawnPoint);
-        System.out.println("Spawned resource: " + toSpawn.getName());
     }
 
     public void spawnCarrion(Point position, int energy) {
