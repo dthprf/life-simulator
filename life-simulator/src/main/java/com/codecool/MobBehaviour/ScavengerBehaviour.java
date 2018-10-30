@@ -23,6 +23,7 @@ public class ScavengerBehaviour implements MobBehaviour {
 
     @Override
     public void update() {
+        System.out.println("SCAVENGER UPDATE : " + mobData.getPosition().toString());
         validateTarget();
         if (target == null) {
             updateTarget();
@@ -80,6 +81,9 @@ public class ScavengerBehaviour implements MobBehaviour {
     }
 
     private void setTargetIfContainsFood(Board board, Point point) {
+        if (point == null) {
+            return;
+        }
         ComponentContainer container = board.getBoard().get(point);
         if (containerHasFood(container)) {
             target = point;
