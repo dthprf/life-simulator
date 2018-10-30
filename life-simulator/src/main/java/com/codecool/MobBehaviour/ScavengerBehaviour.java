@@ -2,8 +2,12 @@ package com.codecool.MobBehaviour;
 
 import com.codecool.Exception.UnrecognizedMobBreedException;
 import com.codecool.Factory.MobFactory;
+import com.codecool.Model.Board;
+import com.codecool.Model.ComponentContainer;
 import com.codecool.Model.MobData.MobData;
 import com.codecool.Model.Point;
+
+import java.util.List;
 
 public class ScavengerBehaviour implements MobBehaviour {
 
@@ -31,6 +35,30 @@ public class ScavengerBehaviour implements MobBehaviour {
             moveTowardsTarget();
         }
     }
+
+
+    private void updateTarget() {
+        Point currentPosition = mobData.getPosition();
+        Board board = mobData.getBoard();
+        List<Point> sightZone = board.adjacentPoints(currentPosition, SIGHT_RANGE);
+        for(Point point : sightZone) {
+            if (target != null) {
+                break;
+            }
+            setTargetIfContainsFood(board, point);
+        }
+    }
+
+    private void setTargetIfContainsFood(Board board, Point point) {
+        ComponentContainer container = board.getBoard().get(point);
+        for (String food : mobData.getFoodList()) {
+            if (container.hasResourceOfType(food)) {
+                target = point;
+                break;
+            }
+        }
+    }
+
 
     @Override
     public void reproduce() {
