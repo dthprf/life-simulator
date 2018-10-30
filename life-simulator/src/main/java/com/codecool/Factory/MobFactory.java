@@ -3,10 +3,8 @@ package com.codecool.Factory;
 import com.codecool.Exception.UnrecognizedMobBreedException;
 import com.codecool.Model.Board;
 import com.codecool.Model.MobData.Herbivore;
+import com.codecool.Model.MobData.Scavenger;
 import com.codecool.Model.Point;
-
-import java.util.concurrent.ThreadLocalRandom;
-
 
 public class MobFactory {
     private static final String PREDATOR_MOB = "predator";
@@ -24,21 +22,21 @@ public class MobFactory {
             case HERBIVORE_MOB:
                 for (int i = 0; i < number; i++) {
                     Point coordinates = board.getRandomPoint();
-                    board.spawnElement(coordinates, new Herbivore(coordinates, HERBIVORE_MOB));
+                    board.spawnElement(new Herbivore(coordinates, HERBIVORE_MOB), coordinates);
                 }
                 break;
 
             case PREDATOR_MOB:
                 for (int i = 0; i < number; i++) {
                     Point coordinates = board.getRandomPoint();
-                    board.spawnElement(coordinates, new Predator(coordinates, PREDATOR_MOB));
+                    board.spawnElement(new Predator(coordinates, PREDATOR_MOB), coordinates);
                 }
                 break;
 
             case SCAVENGER_MOB:
                 for (int i = 0; i < number; i++) {
                     Point coordinates = board.getRandomPoint();
-                    board.spawnElement(coordinates, new Scavenger(coordinates, SCAVENGER_MOB));
+                    board.spawnElement(new Scavenger(coordinates, SCAVENGER_MOB), coordinates);
                 }
                 break;
 
@@ -50,15 +48,15 @@ public class MobFactory {
     public void spawnMob(Point coordinates, int health, String type) throws UnrecognizedMobBreedException {
         switch (type) {
             case HERBIVORE_MOB:
-                board.spawnElement(new Herbivore(coordinates, health, HERBIVORE_MOB));
+                board.spawnElement(new Herbivore(coordinates, HERBIVORE_MOB, health), coordinates);
                 break;
 
             case PREDATOR_MOB:
-                board.spawnElement(new Predator(coordinates, health, PREDATOR_MOB));
+                board.spawnElement(new Predator(coordinates, PREDATOR_MOB, health), coordinates);
                 break;
 
             case SCAVENGER_MOB:
-                board.spawnElement(new Scavenger(coordinates, health, SCAVENGER_MOB));
+                board.spawnElement(new Scavenger(coordinates, SCAVENGER_MOB, health), coordinates);
                 break;
 
             default:
