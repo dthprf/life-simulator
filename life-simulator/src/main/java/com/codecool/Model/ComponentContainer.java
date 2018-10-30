@@ -26,7 +26,7 @@ public class ComponentContainer {
         resources.add(resource);
     }
 
-    public void removeResource(Resource resource) {
+    public synchronized void removeResource(Resource resource) {
         resources.add(resource);
     }
 
@@ -50,5 +50,13 @@ public class ComponentContainer {
             }
         }
         return false;
+    }
+
+    public List<MobData> getMobs() {
+        return mobs;
+    }
+
+    public List<Resource> getResources() {
+        return resources;
     }
 }
