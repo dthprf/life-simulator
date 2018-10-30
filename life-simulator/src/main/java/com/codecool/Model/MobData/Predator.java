@@ -8,5 +8,6 @@ public class Predator extends MobData {
         super(position, breed, board);
         this.damage += 5;
         this.speed += 5;
+        this.foodList = new String[]{"water", "meat", "herbivour"};
     }
 }
