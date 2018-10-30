@@ -9,7 +9,9 @@ public class ScavengerBehaviour implements MobBehaviour {
 
     private final MobFactory factory;
     private final MobData mobData;
+    private final int SIGHT_RANGE = 5;
     private final String SCAVENGER_MOB = "scavenger";
+    private Point target;
 
     public ScavengerBehaviour(MobFactory factory, MobData mobData) {
         this.factory = factory;
@@ -18,7 +20,16 @@ public class ScavengerBehaviour implements MobBehaviour {
 
     @Override
     public void update() {
+        validateTarget();
+        if (target == null) {
+            updateTarget();
+        }
 
+        if (target == null) {
+            moveInRandomDirection();
+        } else {
+            moveTowardsTarget();
+        }
     }
 
     @Override
