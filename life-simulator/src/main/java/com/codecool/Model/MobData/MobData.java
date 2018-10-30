@@ -14,10 +14,9 @@ public abstract class MobData {
     private String breed;
     private List<String> foodList;
 
-    public MobData(Point position, String breed, List<String> foodList) {
+    public MobData(Point position, String breed) {
         this.position = position;
         this.breed = breed;
-        this.foodList = foodList;
     }
 
     public int getEnergy() {
