@@ -153,4 +153,9 @@ public class PredatorBehaviour implements MobBehaviour {
     }
 
 
+    private Resource chooseBestFood(List<Resource> availableFood) {
+        return Collections.max(availableFood, Comparator.comparing(c -> c.getEnergy()));
+    }
+
+
 }
