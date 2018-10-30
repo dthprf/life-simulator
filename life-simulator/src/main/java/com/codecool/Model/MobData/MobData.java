@@ -25,6 +25,14 @@ public abstract class MobData {
         this.health -= damage;
     }
 
+    public void decreaseEnergy(int value) {
+        energy -= value;
+    }
+
+    public void increaseEnergy(int value) {
+        energy += value;
+    }
+
     public int getEnergy() {
         return energy;
     }
