@@ -7,7 +7,9 @@ import com.codecool.Model.Board;
 import com.codecool.Model.ComponentContainer;
 import com.codecool.Model.MobData.MobData;
 import com.codecool.Model.Point;
+import com.codecool.Model.Resource;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ScavengerBehaviour implements MobBehaviour {
@@ -26,12 +28,34 @@ public class ScavengerBehaviour implements MobBehaviour {
         validateTarget();
         if (target == null) {
             updateTarget();
+        } else if (target.equals(mobData.getPosition())) {
+            eat();
         }
 
         if (target == null) {
             stayInPlace();
         } else {
             moveTowardsTarget();
+        }
+    }
+
+    private void eat() {
+        Point position = mobData.getPosition();
+        List<Resource> resources = mobData.getBoard().getBoard().get(position).getResources();
+        List<String> foodList = Arrays.asList(mobData.getFoodList());
+        Resource resource = resources.stream()
+                .filter(r -> foodList.contains(r.getName()))
+                .findFirst().orElse(null);
+        collectResource(position, resource);
+    }
+
+    private void collectResource(Point point, Resource resource) {
+        if (resource == null) {
+            return;
+        }
+        boolean foundFood = this.mobData.getBoard().getBoard().get(point).removeResource(resource);
+        if (foundFood) {
+            this.mobData.increaseEnergy(resource.getEnergy());
         }
     }
 
@@ -52,6 +76,7 @@ public class ScavengerBehaviour implements MobBehaviour {
 
         Point nextPosition = new Point(nextX, nextY);
         mobData.getBoard().moveToPosition(mobData, nextPosition);
+        mobData.decreaseEnergy(2);
     }
 
     private void stayInPlace() {
