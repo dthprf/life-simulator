@@ -141,5 +141,11 @@ public class PredatorBehaviour implements MobBehaviour {
         return new PredatorAction(bestPray, distance, point);
     }
 
-    
+    private MobData chooseBestPray(List<MobData> allMobs) {
+        List<MobData> availableMobs = allMobs.stream()
+                .filter(mob -> !mobData.getBreed().equals(mob.getBreed())).collect(Collectors.toList());
+        return Collections.max(availableMobs, Comparator.comparing(c -> c.getEnergy()));
+    }
+
+
 }
