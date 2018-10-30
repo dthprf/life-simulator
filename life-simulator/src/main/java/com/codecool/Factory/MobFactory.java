@@ -3,6 +3,8 @@ package com.codecool.Factory;
 import com.codecool.Exception.UnrecognizedMobBreedException;
 import com.codecool.MobBehaviour.HerbivoreBehaviour;
 import com.codecool.MobBehaviour.MobBehaviour;
+import com.codecool.MobBehaviour.PredatorBehaviour;
+import com.codecool.MobBehaviour.ScavengerBehaviour;
 import com.codecool.Model.Board;
 import com.codecool.Model.MobData.Herbivore;
 import com.codecool.Model.MobData.MobData;
@@ -37,21 +39,37 @@ public class MobFactory {
 
             case PREDATOR_MOB:
                 for (int i = 0; i < number; i++) {
-                    Point coordinates = board.getRandomPoint();
-                    board.spawnMob(new Predator(drawCoordinates(), PREDATOR_MOB, this.board), coordinates);
+                    MobThread newMob = createPredator();
+                    board.spawnMob(newMob.getMobData(), newMob.getMobData().getPosition());
+                    Thread thread = new Thread(newMob);
+                    thread.start();
                 }
                 break;
 
             case SCAVENGER_MOB:
                 for (int i = 0; i < number; i++) {
-                    Point coordinates = board.getRandomPoint();
-                    board.spawnMob(new Scavenger(drawCoordinates(), SCAVENGER_MOB, this.board), coordinates);
+                    MobThread newMob = createScavenger();
+                    board.spawnMob(newMob.getMobData(), newMob.getMobData().getPosition());
+                    Thread thread = new Thread(newMob);
+                    thread.start();
                 }
                 break;
 
             default:
                 throw new UnrecognizedMobBreedException(type + " is not available.");
         }
+    }
+
+    private MobThread createScavenger() {
+        MobData data = new Scavenger(drawCoordinates(), SCAVENGER_MOB, this.board);
+        MobBehaviour behaviour = new ScavengerBehaviour(this, data);
+        return new MobThread(data, behaviour, spawner);
+    }
+
+    private MobThread createPredator() {
+        MobData data = new Predator(drawCoordinates(), PREDATOR_MOB, this.board);
+        MobBehaviour behaviour = new PredatorBehaviour(this, data);
+        return new MobThread(data, behaviour, spawner);
     }
 
     private MobThread createHerbivore() {
