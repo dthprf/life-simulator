@@ -1,5 +1,6 @@
 package com.codecool.MobBehaviour;
 
+import com.codecool.Constant.MobTypes;
 import com.codecool.Exception.UnrecognizedMobBreedException;
 import com.codecool.Factory.MobFactory;
 import com.codecool.Model.Board;
@@ -13,7 +14,6 @@ public class ScavengerBehaviour implements MobBehaviour {
 
     private final MobFactory factory;
     private final MobData mobData;
-    private final String SCAVENGER_MOB = "scavenger";
     private Point target;
 
     public ScavengerBehaviour(MobFactory factory, MobData mobData) {
@@ -104,7 +104,7 @@ public class ScavengerBehaviour implements MobBehaviour {
         Point currentPosition = mobData.getPosition();
         int energyAfterReproduce = mobData.getEnergy() / 2;
         try {
-            factory.spawnMob(currentPosition, energyAfterReproduce, SCAVENGER_MOB);
+            factory.spawnMob(currentPosition, energyAfterReproduce, MobTypes.SCAVENGER_MOB);
             mobData.setEnergy(energyAfterReproduce);
         } catch (UnrecognizedMobBreedException e) {
             e.printStackTrace();
