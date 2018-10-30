@@ -1,12 +1,15 @@
 package com.codecool.Factory;
 
 import com.codecool.Exception.UnrecognizedMobBreedException;
+import com.codecool.MobBehaviour.HerbivoreBehaviour;
+import com.codecool.MobBehaviour.MobBehaviour;
 import com.codecool.Model.Board;
 import com.codecool.Model.MobData.Herbivore;
 import com.codecool.Model.MobData.MobData;
 import com.codecool.Model.MobData.Predator;
 import com.codecool.Model.MobData.Scavenger;
 import com.codecool.Model.Point;
+import com.codecool.Thread.MobThread;
 
 public class MobFactory {
     private static final String PREDATOR_MOB = "predator";
@@ -14,17 +17,21 @@ public class MobFactory {
     private static final String SCAVENGER_MOB = "scavenger";
 
     private Board board;
+    private ResourceSpawner spawner;
 
-    public MobFactory(Board board) {
+    public MobFactory(Board board, ResourceSpawner spawner) {
         this.board = board;
+        this.spawner = spawner;
     }
 
     public void spawnMob(int number, String type) throws UnrecognizedMobBreedException {
         switch (type) {
             case HERBIVORE_MOB:
                 for (int i = 0; i < number; i++) {
-                    Point coordinates = board.getRandomPoint();
-                    board.spawnMob(new Herbivore(drawCoordinates(), HERBIVORE_MOB, this.board), coordinates);
+                    MobThread newMob = createHerbivore();
+                    board.spawnMob(newMob.getMobData(), newMob.getMobData().getPosition());
+                    Thread thread = new Thread(newMob);
+                    thread.start();
                 }
                 break;
 
@@ -45,6 +52,12 @@ public class MobFactory {
             default:
                 throw new UnrecognizedMobBreedException(type + " is not available.");
         }
+    }
+
+    private MobThread createHerbivore() {
+        MobData data = new Herbivore(drawCoordinates(), HERBIVORE_MOB, this.board);
+        MobBehaviour behaviour = new HerbivoreBehaviour(this, data);
+        return new MobThread(data, behaviour, spawner);
     }
 
     public void spawnMob(Point coordinates, int energy, String type) throws UnrecognizedMobBreedException {
