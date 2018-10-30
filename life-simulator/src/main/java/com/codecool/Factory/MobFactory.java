@@ -29,7 +29,7 @@ public class MobFactory {
 
             case PREDATOR_MOB:
                 for (int i = 0; i < number; i++) {
-                    board.spawnElement(new Herbivore(drawCoordinatesForMob(), PREDATOR_MOB));
+                    board.spawnElement(new Predator(drawCoordinatesForMob(), PREDATOR_MOB));
                 }
                 break;
 
@@ -44,7 +44,24 @@ public class MobFactory {
         }
     }
 
+    public void spawnMob(Point coordinates, int health, String type) throws UnrecognizedMobBreedException {
+        switch (type) {
+            case HERBIVORE_MOB:
+                board.spawnElement(coordinates, health, HERBIVORE_MOB);
+                break;
 
+            case PREDATOR_MOB:
+                board.spawnElement(coordinates, health, PREDATOR_MOB);
+                break;
+
+            case SCAVENGER_MOB:
+                board.spawnElement(coordinates, health, SCAVENGER_MOB);
+                break;
+
+            default:
+                throw new UnrecognizedMobBreedException(type + " is not available.");
+        }
+    }
 
     private Point drawCoordinatesForMob() {
         boolean areCoordinatesCorrect = false;
