@@ -2,6 +2,8 @@ package com.codecool.Model;
 
 import com.codecool.Model.MobData.MobData;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -40,6 +42,20 @@ public class Board {
         int x = random.nextInt(getWidth());
         int y = random.nextInt(getHeight());
         return new Point(x, y);
+    }
+
+    public List<Point> adjacentPoints(Point center, int distance) {
+        List<Point> result = new ArrayList<>();
+        Point adjacent;
+        for(int x = center.getX() - distance; x <= center.getX() + distance; x++) {
+            for(int y = center.getY() - distance; y <= center.getY() + distance; y++) {
+                adjacent = new Point(x, y);
+                if (board.containsKey(adjacent)) {
+                    result.add(adjacent);
+                }
+            }
+        }
+        return result;
     }
 
     public Map<Point, ComponentContainer> getBoard() {
