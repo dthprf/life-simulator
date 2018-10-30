@@ -12,12 +12,12 @@ public class ConsoleView {
     public void printBoard(Board board) {
         List<Point> points = new ArrayList<>(board.getBoard().keySet());
         points.sort(new PointComparator());
-        int lastX = points.get(0).getX();
+        int lastY = points.get(0).getY();
         System.out.println(boardSeparator(board));
         for (Point p : points) {
-            if (p.getX() != lastX) {
+            if (p.getY() != lastY) {
                 System.out.println();
-                lastX = p.getX();
+                lastY = p.getY();
             }
             System.out.print(board.getBoard().get(p).asChar());
         }
@@ -25,6 +25,6 @@ public class ConsoleView {
     }
 
     private String boardSeparator(Board board) {
-        return new String(new char[board.getHeight()]).replace("\0", "-");
+        return new String(new char[board.getWidth()]).replace("\0", "-");
     }
 }
