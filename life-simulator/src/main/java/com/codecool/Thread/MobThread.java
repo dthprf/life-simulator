@@ -38,4 +38,12 @@ public class MobThread implements Runnable {
             resourceSpawner.spawnCarrion(lastPosition, energy);
         }
     }
+
+    public MobData getMobData() {
+        return mobData;
+    }
+
+    public MobBehaviour getMobBehaviour() {
+        return mobBehaviour;
+    }
 }

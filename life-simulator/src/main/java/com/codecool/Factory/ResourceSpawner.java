@@ -25,7 +25,7 @@ public class ResourceSpawner extends Thread {
     public void run() {
         try {
             while (!this.isInterrupted()) {
-                wait(interval);
+                Thread.sleep(interval);
                 spawnResource();
             }
         } catch (InterruptedException e) {

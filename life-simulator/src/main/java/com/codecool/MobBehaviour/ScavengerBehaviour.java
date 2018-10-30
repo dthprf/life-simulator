@@ -1,21 +1,21 @@
 package com.codecool.MobBehaviour;
 
+import com.codecool.Constant.MobTypes;
 import com.codecool.Exception.UnrecognizedMobBreedException;
 import com.codecool.Factory.MobFactory;
 import com.codecool.Model.Board;
 import com.codecool.Model.ComponentContainer;
 import com.codecool.Model.MobData.MobData;
 import com.codecool.Model.Point;
+import com.codecool.Model.Resource;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ScavengerBehaviour implements MobBehaviour {
 
     private final MobFactory factory;
     private final MobData mobData;
-    private final int SIGHT_RANGE = 5;
-    private final int MOVE_RANGE = 1;
-    private final String SCAVENGER_MOB = "scavenger";
     private Point target;
 
     public ScavengerBehaviour(MobFactory factory, MobData mobData) {
@@ -28,12 +28,34 @@ public class ScavengerBehaviour implements MobBehaviour {
         validateTarget();
         if (target == null) {
             updateTarget();
+        } else if (target.equals(mobData.getPosition())) {
+            eat();
         }
 
         if (target == null) {
             stayInPlace();
         } else {
             moveTowardsTarget();
+        }
+    }
+
+    private void eat() {
+        Point position = mobData.getPosition();
+        List<Resource> resources = mobData.getBoard().getBoard().get(position).getResources();
+        List<String> foodList = Arrays.asList(mobData.getFoodList());
+        Resource resource = resources.stream()
+                .filter(r -> foodList.contains(r.getName()))
+                .findFirst().orElse(null);
+        collectResource(position, resource);
+    }
+
+    private void collectResource(Point point, Resource resource) {
+        if (resource == null) {
+            return;
+        }
+        boolean foundFood = this.mobData.getBoard().getBoard().get(point).removeResource(resource);
+        if (foundFood) {
+            this.mobData.increaseEnergy(resource.getEnergy());
         }
     }
 
@@ -54,6 +76,7 @@ public class ScavengerBehaviour implements MobBehaviour {
 
         Point nextPosition = new Point(nextX, nextY);
         mobData.getBoard().moveToPosition(mobData, nextPosition);
+        mobData.decreaseEnergy(2);
     }
 
     private void stayInPlace() {
@@ -71,6 +94,7 @@ public class ScavengerBehaviour implements MobBehaviour {
     private void updateTarget() {
         Point currentPosition = mobData.getPosition();
         Board board = mobData.getBoard();
+        int SIGHT_RANGE = 5;
         List<Point> sightZone = board.adjacentPoints(currentPosition, SIGHT_RANGE);
         for (Point point : sightZone) {
             if (target != null) {
@@ -81,6 +105,9 @@ public class ScavengerBehaviour implements MobBehaviour {
     }
 
     private void setTargetIfContainsFood(Board board, Point point) {
+        if (point == null) {
+            return;
+        }
         ComponentContainer container = board.getBoard().get(point);
         if (containerHasFood(container)) {
             target = point;
@@ -101,7 +128,7 @@ public class ScavengerBehaviour implements MobBehaviour {
         Point currentPosition = mobData.getPosition();
         int energyAfterReproduce = mobData.getEnergy() / 2;
         try {
-            factory.spawnMob(currentPosition, energyAfterReproduce, SCAVENGER_MOB);
+            factory.spawnMob(currentPosition, energyAfterReproduce, MobTypes.SCAVENGER_MOB);
             mobData.setEnergy(energyAfterReproduce);
         } catch (UnrecognizedMobBreedException e) {
             e.printStackTrace();

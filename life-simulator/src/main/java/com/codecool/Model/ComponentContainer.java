@@ -26,8 +26,8 @@ public class ComponentContainer {
         resources.add(resource);
     }
 
-    public synchronized void removeResource(Resource resource) {
-        resources.add(resource);
+    public synchronized boolean removeResource(Resource resource) {
+        return resources.remove(resource);
     }
 
     public boolean hasMobs() {
@@ -35,8 +35,8 @@ public class ComponentContainer {
     }
 
     public boolean hasMobsOfType(String breed) {
-        for(MobData mobData: this.mobs) {
-            if(mobData.getBreed().equals(breed)) {
+        for (MobData mobData : this.mobs) {
+            if (mobData.getBreed().equals(breed)) {
                 return true;
             }
         }
@@ -44,8 +44,8 @@ public class ComponentContainer {
     }
 
     public boolean hasResourceOfType(String name) {
-        for(Resource resource: this.resources) {
-            if(resource.getName().equals(name)) {
+        for (Resource resource : this.resources) {
+            if (resource.getName().equals(name)) {
                 return true;
             }
         }
@@ -58,5 +58,16 @@ public class ComponentContainer {
 
     public List<Resource> getResources() {
         return resources;
+    }
+
+    public String asChar() {
+        if (mobs.isEmpty() && resources.isEmpty()) {
+            return " ";
+        }
+        if (!resources.isEmpty()) {
+            return String.valueOf(resources.get(0).getName().charAt(0)).toLowerCase();
+        } else {
+            return String.valueOf(mobs.get(0).getBreed().charAt(0)).toUpperCase();
+        }
     }
 }
