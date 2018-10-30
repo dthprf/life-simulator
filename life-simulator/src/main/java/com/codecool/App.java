@@ -16,7 +16,8 @@ public class App {
     public static void main(String[] args)  {
         BoardCreator boardCreator = new BoardCreator();
         Board board = boardCreator.createBoard(WIDTH, HEIGHT);
-        MobFactory mobFactory = new MobFactory(board);
+        ResourceSpawner resourceSpawner = new ResourceSpawner(RESOURCE_INTERVAL, board);
+        MobFactory mobFactory = new MobFactory(board, resourceSpawner);
         try {
             mobFactory.spawnMob(2, MobTypes.HERBIVORE_MOB);
             mobFactory.spawnMob(2, MobTypes.PREDATOR_MOB);
@@ -25,7 +26,6 @@ public class App {
             e.printStackTrace();
         }
 
-        Thread resourceSpawner = new ResourceSpawner(RESOURCE_INTERVAL, board);
         resourceSpawner.start();
     }
 }
