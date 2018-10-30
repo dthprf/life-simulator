@@ -147,5 +147,10 @@ public class PredatorBehaviour implements MobBehaviour {
         return Collections.max(availableMobs, Comparator.comparing(c -> c.getEnergy()));
     }
 
+    private PredatorAction proposeFoodCollecting(Point point, ComponentContainer container, int distance) {
+        Resource bestFoodOption = chooseBestFood(container.getResources());
+        return new PredatorAction(bestFoodOption, distance, point);
+    }
+
 
 }
