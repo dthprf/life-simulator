@@ -11,6 +11,7 @@ import com.codecool.Model.Resource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ScavengerBehaviour implements MobBehaviour {
 
@@ -34,10 +35,33 @@ public class ScavengerBehaviour implements MobBehaviour {
         }
 
         if (target == null) {
-            stayInPlace();
+            if (predatorsAreNearby()) {
+                runAway();
+            } else {
+                stayInPlace();
+            }
         } else {
-            moveTowardsTarget();
+            if (target.equals(mobData.getPosition())) {
+                stayInPlace();
+            } else {
+                moveTowardsTarget();
+            }
         }
+    }
+
+    private void runAway() {
+    }
+
+    private boolean predatorsAreNearby() {
+        Point currentPosition = mobData.getPosition();
+        Board board = mobData.getBoard();
+        int DANGER_ZONE = 1;
+        List<Point> sightZone = board.adjacentPoints(currentPosition, DANGER_ZONE);
+        List<Point> dangerPoints = sightZone.stream()
+                .filter(p -> this.mobData.getBoard().getBoard().get(p).hasMobsOfType("predator"))
+                .collect(Collectors.toList());
+
+        return !dangerPoints.isEmpty();
     }
 
     private void eat() {
