@@ -33,4 +33,22 @@ public class ComponentContainer {
     public boolean hasMobs() {
         return !mobs.isEmpty();
     }
+
+    public boolean hasMobsOfType(String breed) {
+        for(MobData mobData: this.mobs) {
+            if(mobData.getBreed().equals(breed)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasResourceOfType(String name) {
+        for(Resource resource: this.resources) {
+            if(resource.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
