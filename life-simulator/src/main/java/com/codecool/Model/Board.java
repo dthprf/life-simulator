@@ -2,37 +2,33 @@ package com.codecool.Model;
 
 import com.codecool.Model.MobData.MobData;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 public class Board {
 
-    private Map<Point, List<Object>> board;
+    private Map<Point, ComponentContainer> board;
     private int width;
     private int height;
 
-    public Board(Map<Point, List<Object>> board, int width, int height) {
+    public Board(Map<Point, ComponentContainer> board, int width, int height) {
         this.board = board;
         this.width = width;
         this.height = height;
     }
 
     public void moveToPosition(MobData mobData, Point desiredPosition) {
-        board.get(mobData.getPosition()).remove(mobData);
+        board.get(mobData.getPosition()).removeMob(mobData);
         mobData.setPosition(desiredPosition);
-        board.get(desiredPosition).add(mobData);
+        board.get(desiredPosition).addMob(mobData);
     }
 
     public void spawnResource(Resource resource, Point point) {
-        List<Object> location = board.get(point);
-        location.add(resource);
-        board.put(point, location);
+        board.get(point).addResource(resource);
     }
 
     public boolean isPointAvailableForMob(Point point) {
-        List<Object> occupants = board.get(point);
-        return occupants.isEmpty();
+        return !board.get(point).hasMobs();
     }
 
     public Point getRandomPoint() {
@@ -42,11 +38,11 @@ public class Board {
         return new Point(x, y);
     }
 
-    public Map getBoard() {
+    public Map<Point, ComponentContainer> getBoard() {
         return board;
     }
 
-    public void setBoard(Map board) {
+    public void setBoard(Map<Point, ComponentContainer> board) {
         this.board = board;
     }
 
