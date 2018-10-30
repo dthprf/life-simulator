@@ -23,19 +23,22 @@ public class MobFactory {
         switch (type) {
             case HERBIVORE_MOB:
                 for (int i = 0; i < number; i++) {
-                    board.spawnElement(new Herbivore(drawCoordinatesForMob(), HERBIVORE_MOB));
+                    Point coordinates = drawCoordinatesForMob();
+                    board.spawnElement(coordinates, new Herbivore(coordinates, HERBIVORE_MOB));
                 }
                 break;
 
             case PREDATOR_MOB:
                 for (int i = 0; i < number; i++) {
-                    board.spawnElement(new Predator(drawCoordinatesForMob(), PREDATOR_MOB));
+                    Point coordinates = drawCoordinatesForMob();
+                    board.spawnElement(coordinates, new Predator(coordinates, PREDATOR_MOB));
                 }
                 break;
 
             case SCAVENGER_MOB:
                 for (int i = 0; i < number; i++) {
-                    board.spawnElement(new Scavenger(drawCoordinatesForMob(), SCAVENGER_MOB));
+                    Point coordinates = drawCoordinatesForMob();
+                    board.spawnElement(coordinates, new Scavenger(coordinates, SCAVENGER_MOB));
                 }
                 break;
 
