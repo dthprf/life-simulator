@@ -4,6 +4,7 @@ import com.codecool.Exception.UnrecognizedMobBreedException;
 import com.codecool.Model.Board;
 import com.codecool.Model.MobData.Herbivore;
 import com.codecool.Model.MobData.MobData;
+import com.codecool.Model.MobData.Predator;
 import com.codecool.Model.MobData.Scavenger;
 import com.codecool.Model.Point;
 
