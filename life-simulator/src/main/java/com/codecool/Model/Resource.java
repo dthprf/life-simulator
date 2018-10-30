@@ -6,7 +6,7 @@ public class Resource {
 
     public Resource(int energy, String name) {
         this.energy = energy;
-        this.name = name.toUpperCase();
+        this.name = name.toLowerCase();
     }
 
     public int getEnergy() {
