@@ -7,6 +7,7 @@ import com.codecool.Model.ComponentContainer;
 import com.codecool.Model.MobData.MobData;
 import com.codecool.Model.Point;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ScavengerBehaviour implements MobBehaviour {
@@ -14,6 +15,7 @@ public class ScavengerBehaviour implements MobBehaviour {
     private final MobFactory factory;
     private final MobData mobData;
     private final int SIGHT_RANGE = 5;
+    private final int MOVE_RANGE = 1;
     private final String SCAVENGER_MOB = "scavenger";
     private Point target;
 
@@ -30,10 +32,14 @@ public class ScavengerBehaviour implements MobBehaviour {
         }
 
         if (target == null) {
-            moveInRandomDirection();
+            stayInPlace();
         } else {
             moveTowardsTarget();
         }
+    }
+
+    private void stayInPlace() {
+        mobData.decreaseEnergy(1);
     }
 
     private void validateTarget() {
