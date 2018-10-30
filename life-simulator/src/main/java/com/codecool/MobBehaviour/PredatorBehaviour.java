@@ -157,5 +157,18 @@ public class PredatorBehaviour implements MobBehaviour {
         return Collections.max(availableFood, Comparator.comparing(c -> c.getEnergy()));
     }
 
+    private void proceedInstantAction(PredatorAction action) {
+        ComponentContainer targetContainer = getComponent(action.getCoordinate());
+
+        if (action.getActionType().equals(ATTACK_MOB)) {
+            MobData target = chooseBestPray(targetContainer.getMobs());
+            isMoveDone = attackMob(target);
+
+        } else if (action.getActionType().equals(COLLECT_FOOD)) {
+            Resource target = chooseBestFood(targetContainer.getResources());
+            isMoveDone = collectResource(action.getCoordinate(), target);
+        }
+    }
+
 
 }
