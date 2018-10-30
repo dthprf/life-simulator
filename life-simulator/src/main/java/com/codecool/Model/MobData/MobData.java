@@ -1,11 +1,13 @@
 package com.codecool.Model.MobData;
 
+import com.codecool.Model.Board;
 import com.codecool.Model.Point;
 
 import java.util.List;
 
 public abstract class MobData {
 
+    Board board;
     private int energy = 100;
     private Point position;
     int health = 3;
@@ -14,10 +16,11 @@ public abstract class MobData {
     private String breed;
     private List<String> foodList;
 
-    public MobData(Point position, String breed, List<String> foodList) {
+    public MobData(Point position, String breed, List<String> foodList, Board board) {
         this.position = position;
         this.breed = breed;
         this.foodList = foodList;
+        this.board = board;
     }
 
     public int getEnergy() {
