@@ -132,5 +132,9 @@ public class PredatorBehaviour implements MobBehaviour {
         mobData.decreaseEnergy(1);
     }
 
+    private ComponentContainer getComponent(Point point) {
+        return mobData.getBoard().getBoard().get(point);
+    }
+
 
 }
