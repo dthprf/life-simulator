@@ -27,7 +27,7 @@ public class Board {
         board.get(point).addResource(resource);
     }
     
-    public void spawnElement(MobData mob, Point point) {
+    public void spawnMob(MobData mob, Point point) {
         board.get(point).addMob(mob);
     }
 
