@@ -1,6 +1,8 @@
 package com.codecool.Factory;
 
+import com.codecool.Exception.UnrecognizedMobBreedException;
 import com.codecool.Model.Board;
+import com.codecool.Model.MobData.Herbivore;
 import com.codecool.Model.Point;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,13 +19,32 @@ public class MobFactory {
         this.board = board;
     }
 
-    public void spawnMob(int number, String type) {
+    public void spawnMob(int number, String type) throws UnrecognizedMobBreedException {
+        switch (type) {
+            case HERBIVORE_MOB:
+                for (int i = 0; i < number; i++) {
+                    board.spawnElement(new Herbivore(drawCoordinatesForMob(), HERBIVORE_MOB));
+                }
+                break;
 
+            case PREDATOR_MOB:
+                for (int i = 0; i < number; i++) {
+                    board.spawnElement(new Herbivore(drawCoordinatesForMob(), PREDATOR_MOB));
+                }
+                break;
+
+            case SCAVENGER_MOB:
+                for (int i = 0; i < number; i++) {
+                    board.spawnElement(new Scavenger(drawCoordinatesForMob(), SCAVENGER_MOB));
+                }
+                break;
+
+            default:
+                throw new UnrecognizedMobBreedException(type + " is not available.");
+        }
     }
 
-    public void spawnMob(Point coordinates, int health) {
 
-    }
 
     private Point drawCoordinatesForMob() {
         boolean areCoordinatesCorrect = false;
