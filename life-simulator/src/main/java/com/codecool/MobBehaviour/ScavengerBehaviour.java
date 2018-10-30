@@ -51,14 +51,19 @@ public class ScavengerBehaviour implements MobBehaviour {
 
     private void setTargetIfContainsFood(Board board, Point point) {
         ComponentContainer container = board.getBoard().get(point);
-        for (String food : mobData.getFoodList()) {
-            if (container.hasResourceOfType(food)) {
-                target = point;
-                break;
-            }
+        if (containerHasFood(container)) {
+            target = point;
         }
     }
 
+    private boolean containerHasFood(ComponentContainer container) {
+        for (String food : mobData.getFoodList()) {
+            if (container.hasResourceOfType(food)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public void reproduce() {
