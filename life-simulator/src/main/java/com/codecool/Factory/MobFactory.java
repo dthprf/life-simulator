@@ -60,6 +60,43 @@ public class MobFactory {
         }
     }
 
+    public void spawnMob(Point coordinates, int energy, String type) throws UnrecognizedMobBreedException {
+        MobThread newMob;
+        switch (type) {
+            case HERBIVORE_MOB:
+                newMob = createHerbivore();
+                break;
+
+            case PREDATOR_MOB:
+                newMob = createPredator();
+                break;
+
+            case SCAVENGER_MOB:
+                newMob = createScavenger();
+                break;
+
+            default:
+                throw new UnrecognizedMobBreedException(type + " is not available.");
+        }
+        newMob.getMobData().setPosition(coordinates);
+        newMob.getMobData().setEnergy(energy);
+        board.spawnMob(newMob.getMobData(), newMob.getMobData().getPosition());
+        Thread thread = new Thread(newMob);
+        thread.start();
+    }
+
+    private Point drawCoordinates() {
+        boolean isCoordinateAvailable = false;
+        Point coordinates = null;
+
+        while (!isCoordinateAvailable) {
+            coordinates = board.getRandomPoint();
+            isCoordinateAvailable = board.isPointAvailableForMob(coordinates);
+        }
+
+        return coordinates;
+    }
+
     private MobThread createScavenger() {
         MobData data = new Scavenger(drawCoordinates(), SCAVENGER_MOB, this.board);
         MobBehaviour behaviour = new ScavengerBehaviour(this, data);
@@ -76,42 +113,5 @@ public class MobFactory {
         MobData data = new Herbivore(drawCoordinates(), HERBIVORE_MOB, this.board);
         MobBehaviour behaviour = new HerbivoreBehaviour(this, data);
         return new MobThread(data, behaviour, spawner);
-    }
-
-    public void spawnMob(Point coordinates, int energy, String type) throws UnrecognizedMobBreedException {
-        switch (type) {
-            case HERBIVORE_MOB:
-                MobData herbivoreMob = new Herbivore(coordinates, HERBIVORE_MOB, this.board);
-                herbivoreMob.setEnergy(energy);
-                board.spawnMob(herbivoreMob, coordinates);
-                break;
-
-            case PREDATOR_MOB:
-                MobData predatorMob = new Predator(coordinates, PREDATOR_MOB, this.board);
-                predatorMob.setEnergy(energy);
-                board.spawnMob(predatorMob, coordinates);
-                break;
-
-            case SCAVENGER_MOB:
-                MobData scavengerMob = new Scavenger(coordinates, SCAVENGER_MOB, this.board);
-                scavengerMob.setEnergy(energy);
-                board.spawnMob(scavengerMob, coordinates);
-                break;
-
-            default:
-                throw new UnrecognizedMobBreedException(type + " is not available.");
-        }
-    }
-
-    private Point drawCoordinates() {
-        boolean isCoordinateAvailable = false;
-        Point coordinates = null;
-
-        while (!isCoordinateAvailable) {
-            coordinates = board.getRandomPoint();
-            isCoordinateAvailable = board.isPointAvailableForMob(coordinates);
-        }
-
-        return coordinates;
     }
 }
