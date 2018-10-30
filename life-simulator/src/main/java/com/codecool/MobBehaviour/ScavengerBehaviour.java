@@ -9,7 +9,6 @@ import com.codecool.Model.MobData.MobData;
 import com.codecool.Model.Point;
 import com.codecool.Model.Resource;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,10 +61,63 @@ public class ScavengerBehaviour implements MobBehaviour {
         }
     }
 
+    private void runAway(List<Point> dangerPoints) {
+        Point pointOfHighestThreat = getBiggestThreat(dangerPoints);
+        Point nextPosition = getEscapePoint(pointOfHighestThreat);
+        mobData.getBoard().moveToPosition(mobData, nextPosition);
+        mobData.decreaseEnergy(2);
+    }
+
+    private Point getEscapePoint(Point pointOfHighestThreat) {
+        int threatX = pointOfHighestThreat.getX();
+        int threatY = pointOfHighestThreat.getY();
+        int nextX = this.mobData.getPosition().getX();
+        int nextY = this.mobData.getPosition().getY();
+        Board board = this.mobData.getBoard();
+        if (threatX > nextX) {
+            if (nextX - 1 > 0) {
+                nextX--;
+            }
+        } else {
+            if (nextX + 1 < board.getWidth()) {
+                nextX++;
+            }
+        }
+
+        if (threatY > nextY) {
+            if (nextY - 1 > 0) {
+                nextY--;
+            }
+        } else {
+            if (nextY + 1 < board.getHeight()) {
+                nextY++;
+            }
+        }
+
+        return new Point(nextX, nextY);
+    }
+
+    private Point getBiggestThreat(List<Point> dangerPoints) {
+        Integer lowestEnergy = null;
+        Point result = null;
+        for (Point point : dangerPoints) {
+            ComponentContainer container = mobData.getBoard().getBoard().get(point);
+            int predatorEnergy = container.getMobs().stream()
+                    .filter(mob -> mob.getBreed().equalsIgnoreCase(MobTypes.PREDATOR_MOB))
+                    .mapToInt(MobData::getEnergy)
+                    .min().orElse(200);
+            if (lowestEnergy == null || lowestEnergy > predatorEnergy) {
+                lowestEnergy = predatorEnergy;
+                result = point;
+            }
+        }
+        return result;
+    }
+
     private boolean attackWeakPredators(List<Point> dangerPoints) {
-        int myDamage = mobData.getDamage();
+        int myDamage = mobData.getDamage() + 10;
         boolean attacked = false;
-        for(Point point : dangerPoints) {
+        for (Point point : dangerPoints) {
             ComponentContainer container = mobData.getBoard().getBoard().get(point);
             for (MobData otherMob : container.getMobs()) {
                 if (otherMob.getBreed().equalsIgnoreCase(this.mobData.getBreed())) {
@@ -94,15 +146,18 @@ public class ScavengerBehaviour implements MobBehaviour {
 
     private void eat() {
         Point position = mobData.getPosition();
-        List<Resource> resources = mobData.getBoard().getBoard().get(position).getResources();
-        if (resources.isEmpty()) {
-            return;
+        ComponentContainer container = mobData.getBoard().getBoard().get(position);
+        collectResource(container);
+    }
+
+    private void collectResource(ComponentContainer container) {
+        for (String foodType : mobData.getFoodList()) {
+            Resource resource = container.removeResourceOfType(foodType);
+            if (resource != null) {
+                mobData.increaseEnergy(resource.getEnergy());
+                break;
+            }
         }
-        List<String> foodList = Arrays.asList(mobData.getFoodList());
-        Resource resource = resources.stream()
-                .filter(r -> foodList.contains(r.getName()))
-                .findFirst().orElse(null);
-        collectResource(position, resource);
     }
 
     private void collectResource(Point point, Resource resource) {
@@ -148,7 +203,7 @@ public class ScavengerBehaviour implements MobBehaviour {
     private void updateTarget() {
         Point currentPosition = mobData.getPosition();
         Board board = mobData.getBoard();
-        int SIGHT_RANGE = 5;
+        int SIGHT_RANGE = 7;
         List<Point> sightZone = board.adjacentPoints(currentPosition, SIGHT_RANGE);
         for (Point point : sightZone) {
             if (target != null) {
