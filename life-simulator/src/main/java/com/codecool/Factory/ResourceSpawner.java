@@ -39,6 +39,11 @@ public class ResourceSpawner extends Thread {
         board.spawnResource(toSpawn, spawnPoint);
     }
 
+    public void spawnCarrion(Point position, int energy) {
+        Resource carrion = new Resource(energy, "carrion");
+        board.spawnResource(carrion, position);
+    }
+
     private List<Resource> generateResources() {
         List<Resource> resources = new ArrayList<>();
         Resource herb = new Resource(5, "herb");
