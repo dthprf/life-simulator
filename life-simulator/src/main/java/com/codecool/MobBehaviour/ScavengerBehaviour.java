@@ -13,8 +13,6 @@ public class ScavengerBehaviour implements MobBehaviour {
 
     private final MobFactory factory;
     private final MobData mobData;
-    private final int SIGHT_RANGE = 5;
-    private final int MOVE_RANGE = 1;
     private final String SCAVENGER_MOB = "scavenger";
     private Point target;
 
@@ -71,6 +69,7 @@ public class ScavengerBehaviour implements MobBehaviour {
     private void updateTarget() {
         Point currentPosition = mobData.getPosition();
         Board board = mobData.getBoard();
+        int SIGHT_RANGE = 5;
         List<Point> sightZone = board.adjacentPoints(currentPosition, SIGHT_RANGE);
         for (Point point : sightZone) {
             if (target != null) {
