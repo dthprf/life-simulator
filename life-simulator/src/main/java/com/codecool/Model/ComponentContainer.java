@@ -30,6 +30,16 @@ public class ComponentContainer {
         return resources.remove(resource);
     }
 
+    public synchronized Resource removeResourceOfType(String type) {
+        for (Resource resource : resources) {
+            if (resource.getName().equalsIgnoreCase(type)) {
+                resources.remove(resource);
+                return resource;
+            }
+        }
+        return null;
+    }
+
     public boolean hasMobs() {
         return !mobs.isEmpty();
     }
