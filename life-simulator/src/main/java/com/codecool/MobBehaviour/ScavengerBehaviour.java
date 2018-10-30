@@ -30,6 +30,7 @@ public class ScavengerBehaviour implements MobBehaviour {
             updateTarget();
         } else if (target.equals(mobData.getPosition())) {
             eat();
+            updateTarget();
         }
 
         if (target == null) {
@@ -42,6 +43,9 @@ public class ScavengerBehaviour implements MobBehaviour {
     private void eat() {
         Point position = mobData.getPosition();
         List<Resource> resources = mobData.getBoard().getBoard().get(position).getResources();
+        if (resources.isEmpty()) {
+            return;
+        }
         List<String> foodList = Arrays.asList(mobData.getFoodList());
         Resource resource = resources.stream()
                 .filter(r -> foodList.contains(r.getName()))
@@ -84,10 +88,8 @@ public class ScavengerBehaviour implements MobBehaviour {
     }
 
     private void validateTarget() {
-        Point previousTarget = target;
-        target = null;
         Board board = mobData.getBoard();
-        setTargetIfContainsFood(board, previousTarget);
+        setTargetIfContainsFood(board, target);
     }
 
 
@@ -111,6 +113,8 @@ public class ScavengerBehaviour implements MobBehaviour {
         ComponentContainer container = board.getBoard().get(point);
         if (containerHasFood(container)) {
             target = point;
+        } else {
+            target = null;
         }
     }
 
