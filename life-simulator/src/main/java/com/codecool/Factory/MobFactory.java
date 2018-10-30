@@ -3,10 +3,8 @@ package com.codecool.Factory;
 import com.codecool.Exception.UnrecognizedMobBreedException;
 import com.codecool.Model.Board;
 import com.codecool.Model.MobData.Herbivore;
+import com.codecool.Model.MobData.Scavenger;
 import com.codecool.Model.Point;
-
-import java.util.concurrent.ThreadLocalRandom;
-
 
 public class MobFactory {
     private static final String PREDATOR_MOB = "predator";
@@ -23,19 +21,22 @@ public class MobFactory {
         switch (type) {
             case HERBIVORE_MOB:
                 for (int i = 0; i < number; i++) {
-                    board.spawnElement(new Herbivore(drawCoordinatesForMob(), HERBIVORE_MOB));
+                    Point coordinates = board.getRandomPoint();
+                    board.spawnElement(new Herbivore(coordinates, HERBIVORE_MOB), coordinates);
                 }
                 break;
 
             case PREDATOR_MOB:
                 for (int i = 0; i < number; i++) {
-                    board.spawnElement(new Predator(drawCoordinatesForMob(), PREDATOR_MOB));
+                    Point coordinates = board.getRandomPoint();
+                    board.spawnElement(new Predator(coordinates, PREDATOR_MOB), coordinates);
                 }
                 break;
 
             case SCAVENGER_MOB:
                 for (int i = 0; i < number; i++) {
-                    board.spawnElement(new Scavenger(drawCoordinatesForMob(), SCAVENGER_MOB));
+                    Point coordinates = board.getRandomPoint();
+                    board.spawnElement(new Scavenger(coordinates, SCAVENGER_MOB), coordinates);
                 }
                 break;
 
@@ -47,35 +48,19 @@ public class MobFactory {
     public void spawnMob(Point coordinates, int health, String type) throws UnrecognizedMobBreedException {
         switch (type) {
             case HERBIVORE_MOB:
-                board.spawnElement(coordinates, health, HERBIVORE_MOB);
+                board.spawnElement(new Herbivore(coordinates, HERBIVORE_MOB, health), coordinates);
                 break;
 
             case PREDATOR_MOB:
-                board.spawnElement(coordinates, health, PREDATOR_MOB);
+                board.spawnElement(new Predator(coordinates, PREDATOR_MOB, health), coordinates);
                 break;
 
             case SCAVENGER_MOB:
-                board.spawnElement(coordinates, health, SCAVENGER_MOB);
+                board.spawnElement(new Scavenger(coordinates, SCAVENGER_MOB, health), coordinates);
                 break;
 
             default:
                 throw new UnrecognizedMobBreedException(type + " is not available.");
         }
-    }
-
-    private Point drawCoordinatesForMob() {
-        boolean areCoordinatesCorrect = false;
-        Point coordinates = null;
-        int maxY = board.getHeight();
-        int maxX = board.getWidth();
-
-        while(!areCoordinatesCorrect) {
-            int randomY = ThreadLocalRandom.current().nextInt(0, maxY);
-            int randomX = ThreadLocalRandom.current().nextInt(0, maxX);
-            coordinates = new Point(randomX, randomY);
-            areCoordinatesCorrect = board.isPointAvailableForMob(coordinates);
-        }
-
-        return coordinates;
     }
 }

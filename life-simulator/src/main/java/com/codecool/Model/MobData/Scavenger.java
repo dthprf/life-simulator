@@ -8,4 +8,11 @@ public class Scavenger extends MobData {
         this.damage += 3;
         this.speed += 7;
     }
+
+    public Scavenger(Point position, String breed, int health) {
+        super(position, breed);
+        this.health = health;
+        this.damage += 3;
+        this.speed += 7;
+    }
 }
