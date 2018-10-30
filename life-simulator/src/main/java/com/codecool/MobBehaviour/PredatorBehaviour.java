@@ -122,5 +122,11 @@ public class PredatorBehaviour implements MobBehaviour {
         mobData.decreaseEnergy(2);
     }
 
+    private Point chooseRandomDirection() {
+        List<Point> availablePoints = mobData.getBoard().adjacentPoints(mobData.getPosition(), 1);
+        availablePoints.remove(mobData.getPosition());
+        return availablePoints.get(new Random().nextInt(availablePoints.size()));
+    }
+
 
 }
