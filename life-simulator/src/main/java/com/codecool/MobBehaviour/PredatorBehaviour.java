@@ -94,5 +94,13 @@ public class PredatorBehaviour implements MobBehaviour {
         return actionsQueue;
     }
 
+    private void makeUpdateWhenNoFood() {
+        if (mobData.getEnergy() > 30) {
+            moveTowardsTarget(chooseRandomDirection());
+        } else {
+            stayInPosition();
+        }
+    }
+
 
 }
