@@ -21,6 +21,10 @@ public abstract class MobData {
         this.board = board;
     }
 
+    public void dealDamage(int damage) {
+        this.health -= damage;
+    }
+
     public int getEnergy() {
         return energy;
     }
