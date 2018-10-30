@@ -28,7 +28,7 @@ public class Board {
     public void spawnResource(Resource resource, Point point) {
         board.get(point).addResource(resource);
     }
-    
+
     public void spawnMob(MobData mob, Point point) {
         board.get(point).addMob(mob);
     }
@@ -47,8 +47,8 @@ public class Board {
     public List<Point> adjacentPoints(Point center, int distance) {
         List<Point> result = new ArrayList<>();
         Point adjacent;
-        for(int x = center.getX() - distance; x <= center.getX() + distance; x++) {
-            for(int y = center.getY() - distance; y <= center.getY() + distance; y++) {
+        for (int x = center.getX() - distance; x <= center.getX() + distance; x++) {
+            for (int y = center.getY() - distance; y <= center.getY() + distance; y++) {
                 adjacent = new Point(x, y);
                 if (board.containsKey(adjacent)) {
                     result.add(adjacent);

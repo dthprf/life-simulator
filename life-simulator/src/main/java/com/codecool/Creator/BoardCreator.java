@@ -16,7 +16,7 @@ public class BoardCreator {
     public Board createBoard(int width, int height) {
         Map<Point, ComponentContainer> board = new ConcurrentHashMap<>();
         for (int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
+            for (int y = 0; y < height; y++) {
                 Point key = new Point(x, y);
                 List<MobData> mobData = new ArrayList<>();
                 List<Resource> resources = new ArrayList<>();

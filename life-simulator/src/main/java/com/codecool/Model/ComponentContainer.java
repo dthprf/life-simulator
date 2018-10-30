@@ -35,8 +35,8 @@ public class ComponentContainer {
     }
 
     public boolean hasMobsOfType(String breed) {
-        for(MobData mobData: this.mobs) {
-            if(mobData.getBreed().equals(breed)) {
+        for (MobData mobData : this.mobs) {
+            if (mobData.getBreed().equals(breed)) {
                 return true;
             }
         }
@@ -44,8 +44,8 @@ public class ComponentContainer {
     }
 
     public boolean hasResourceOfType(String name) {
-        for(Resource resource: this.resources) {
-            if(resource.getName().equals(name)) {
+        for (Resource resource : this.resources) {
+            if (resource.getName().equals(name)) {
                 return true;
             }
         }
