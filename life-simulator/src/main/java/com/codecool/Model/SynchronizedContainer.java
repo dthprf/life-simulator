@@ -2,40 +2,36 @@ package com.codecool.Model;
 
 import com.codecool.Model.MobData.MobData;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class SynchronizedContainer {
+class SynchronizedContainer {
 
     private List<MobData> mobs;
     private List<Resource> resources;
 
-    public SynchronizedContainer(List<MobData> mobs, List<Resource> resources) {
+    SynchronizedContainer(List<MobData> mobs, List<Resource> resources) {
         this.mobs = mobs;
         this.resources = resources;
     }
 
-    public void addMob(MobData mob) {
+    void addMob(MobData mob) {
         mobs.add(mob);
     }
 
-    public void removeMob(MobData mob) {
+    void removeMob(MobData mob) {
         mobs.remove(mob);
     }
 
-    public void addResource(Resource resource) {
+    void addResource(Resource resource) {
         resources.add(resource);
     }
 
-    public synchronized boolean removeResource(Resource resource) {
+    synchronized boolean removeResource(Resource resource) {
         return resources.remove(resource);
     }
 
-    public synchronized Resource removeResourceOfType(String type) {
+    synchronized Resource removeResourceOfType(String type) {
         for (Resource resource : resources) {
-            System.out.println(type + " " + resource.getName() + " " + (type.equalsIgnoreCase(resource.getName())));
             if (resource.getName().equalsIgnoreCase(type)) {
                 resources.remove(resource);
                 return resource;
@@ -44,11 +40,11 @@ public class SynchronizedContainer {
         return null;
     }
 
-    public boolean hasMobs() {
+    boolean hasMobs() {
         return !mobs.isEmpty();
     }
 
-    public boolean hasMobsOfType(String breed) {
+    boolean hasMobsOfType(String breed) {
         for (MobData mobData : this.mobs) {
             if (mobData.getBreed().equals(breed)) {
                 return true;
@@ -57,7 +53,7 @@ public class SynchronizedContainer {
         return false;
     }
 
-    public boolean hasResourceOfType(String name) {
+    boolean hasResourceOfType(String name) {
         for (Resource resource : this.resources) {
             if (resource.getName().equals(name)) {
                 return true;
@@ -66,15 +62,15 @@ public class SynchronizedContainer {
         return false;
     }
 
-    public List<MobData> getMobs() {
+    List<MobData> getMobs() {
         return mobs;
     }
 
-    public List<Resource> getResources() {
+    List<Resource> getResources() {
         return resources;
     }
 
-    public String asChar() {
+    String asChar() {
         if (mobs.isEmpty() && resources.isEmpty()) {
             return " ";
         }
@@ -85,9 +81,9 @@ public class SynchronizedContainer {
         }
     }
 
-    public MobData getBestPrey(MobData hunter) {
+    MobData getBestPrey(MobData hunter) {
         MobData prey = null;
-        for(MobData mob : mobs) {
+        for (MobData mob : mobs) {
             if (mob.getBreed().equalsIgnoreCase(hunter.getBreed())) {
                 continue;
             }
@@ -98,11 +94,11 @@ public class SynchronizedContainer {
         return prey;
     }
 
-    public Resource getBestFood(String[] foodList) {
-        for(String food : foodList) {
+    Resource getBestFood(String[] foodList) {
+        for (String food : foodList) {
             Resource r = resources.stream()
                     .filter(resource -> resource.getName().equalsIgnoreCase(food))
-                    .findFirst().get();
+                    .findFirst().orElse(null);
             if (r != null) {
                 return r;
             }

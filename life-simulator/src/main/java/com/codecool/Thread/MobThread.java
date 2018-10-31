@@ -29,7 +29,7 @@ public class MobThread implements Runnable {
                 return;
             }
         }
-//        System.out.println("MOB DIED " + mobData.getBreed());
+
         if (diedDueToDamage()) {
             spawnMeat();
         } else if (diedDueToLackOfFood()) {

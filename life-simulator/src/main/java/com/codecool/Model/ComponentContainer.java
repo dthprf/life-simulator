@@ -2,10 +2,7 @@ package com.codecool.Model;
 
 import com.codecool.Model.MobData.MobData;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ComponentContainer {
 
@@ -15,7 +12,7 @@ public class ComponentContainer {
         this.container = new SynchronizedContainer(mobs, resources);
     }
 
-    public void addMob(MobData mob) {
+    void addMob(MobData mob) {
         synchronized (container) {
             container.addMob(mob);
         }
@@ -27,7 +24,7 @@ public class ComponentContainer {
         }
     }
 
-    public void addResource(Resource resource) {
+    void addResource(Resource resource) {
         synchronized (container) {
             container.addResource(resource);
         }
@@ -45,7 +42,7 @@ public class ComponentContainer {
         }
     }
 
-    public boolean hasMobs() {
+    boolean hasMobs() {
         synchronized (container) {
             return container.hasMobs();
         }
