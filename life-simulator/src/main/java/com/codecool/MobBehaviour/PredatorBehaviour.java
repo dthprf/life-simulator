@@ -161,6 +161,7 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
     private boolean attackMob(MobData pray) {
         if (pray != null) {
             pray.dealDamage(mobData.getDamage());
+            mobData.decreaseEnergy(4);
             return true;
         }
         return false;
