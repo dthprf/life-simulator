@@ -21,7 +21,7 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
     private final MobFactory factory;
     private final MobData mobData;
     private final String PREDATOR_MOB = "predator";
-    private final int VIEW_DISTANCE = 9;
+    private final int VIEW_DISTANCE = 7;
     private final String COLLECT_FOOD = "collect";
     private final String ATTACK_MOB = "attack";
     private boolean isMoveDone = false;
