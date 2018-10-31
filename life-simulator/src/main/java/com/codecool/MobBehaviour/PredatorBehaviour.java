@@ -82,7 +82,10 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
             List<Point> closestFields = getFieldsInRange(i, lineOfSight);
 
             for (Point point : closestFields) {
-                if (!getComponent(point).getMobs().stream().filter(mob -> !mobData.getBreed().equals(mob.getBreed())).collect(Collectors.toList()).isEmpty()) {
+                if (!getComponent(point).getMobs().stream()
+                        .filter(mob -> !mobData.getBreed().equals(mob.getBreed()))
+                        .collect(Collectors.toList())
+                        .isEmpty()) {
                     actionsQueue.offer(proposeHunting(point, getComponent(point), i));
                 }
 
@@ -149,8 +152,8 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
             isMoveDone = attackMob(target);
 
         } else if (action.getActionType().equals(COLLECT_FOOD)) {
-            Resource target = chooseBestFood(targetContainer.getResources());
-            isMoveDone = collectResource(action.getCoordinate(), target);
+//            Resource target = chooseBestFood(targetContainer.getResources());
+            isMoveDone = collectResource(getComponent(action.getCoordinate()));
         }
     }
 
@@ -167,6 +170,18 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
             this.mobData.getBoard().getBoard().get(point).removeResource(resource);
             this.mobData.increaseEnergy(resource.getEnergy());
             return true;
+        }
+        return false;
+    }
+
+    private boolean collectResource(ComponentContainer container) {
+        for (String foodType : mobData.getFoodList()) {
+            Resource resource = container.removeResourceOfType(foodType);
+
+            if (resource != null) {
+                mobData.increaseEnergy(resource.getEnergy());
+                return true;
+            }
         }
         return false;
     }
