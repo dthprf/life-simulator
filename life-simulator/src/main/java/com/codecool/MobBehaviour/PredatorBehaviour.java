@@ -129,7 +129,8 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
     }
 
     private MobData chooseBestPray(List<MobData> allMobs) {
-        List<MobData> availableMobs = allMobs.stream()
+
+        List<MobData> availableMobs = allMobs.parallelStream()
                 .filter(mob -> !mobData.getBreed().equals(mob.getBreed())).collect(Collectors.toList());
         return Collections.max(availableMobs, Comparator.comparing(c -> c.getEnergy()));
     }
