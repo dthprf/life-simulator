@@ -10,6 +10,7 @@ import java.util.List;
 public class ConsoleView implements Runnable {
     private final Board board;
     private final int interval;
+    private List<Point> sortedBoardKeys;
 
     public ConsoleView(Board board, int interval) {
         this.board = board;
@@ -19,9 +20,12 @@ public class ConsoleView implements Runnable {
     @Override
     public void run() {
         Thread thread = Thread.currentThread();
+        sortedBoardKeys = new ArrayList<>(board.getBoard().keySet());
+        sortedBoardKeys.sort(new PointComparator());
         while (!thread.isInterrupted()) {
             try {
                 Thread.sleep(interval);
+                clearScreen();
                 printBoard();
             } catch (InterruptedException e) {
                 // Stop display
@@ -29,24 +33,31 @@ public class ConsoleView implements Runnable {
         }
     }
 
-    public void printBoard() {
-        List<Point> points = new ArrayList<>(board.getBoard().keySet());
-        points.sort(new PointComparator());
-        int lastY = points.get(0).getY();
-        System.out.println(boardSeparator(board));
-        for (Point p : points) {
+    private void printBoard() {
+        System.out.println(stringifyBoard());
+    }
+
+    private String stringifyBoard() {
+        StringBuilder builder = new StringBuilder("\n");
+        builder.append(boardSeparator(board));
+        int lastY = sortedBoardKeys.get(0).getY();
+        for (Point p : sortedBoardKeys) {
             if (p.getY() != lastY) {
-                System.out.println();
+                builder.append("\n");
                 lastY = p.getY();
             }
-            System.out.print(board.getBoard().get(p).asChar());
+            builder.append(board.getBoard().get(p).asChar());
         }
-        System.out.println();
+        builder.append("\n");
+        return builder.toString();
     }
 
     private String boardSeparator(Board board) {
         return new String(new char[board.getWidth()]).replace("\0", "-");
     }
 
-
+    private void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
 }
