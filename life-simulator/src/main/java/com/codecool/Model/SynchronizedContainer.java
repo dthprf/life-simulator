@@ -78,9 +78,9 @@ public class SynchronizedContainer {
             return " ";
         }
         if (!mobs.isEmpty()) {
-            return String.valueOf(mobs.get(0).getBreed().charAt(0)).toUpperCase();
+            return String.valueOf(mobs.get(0).getAsText());
         } else {
-            return String.valueOf(resources.get(0).getName().charAt(0)).toLowerCase();
+            return String.valueOf(resources.get(0).getAsText());
         }
     }
 
