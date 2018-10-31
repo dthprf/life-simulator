@@ -5,7 +5,7 @@ import com.codecool.Model.Point;
 
 public class Predator extends MobData {
     public Predator(Point position, String breed, Board board) {
-        super(position, breed, board);
+        super(position, breed, board, "\uD83D\uDC3A");
         this.health += 1;
         this.damage += 5;
         this.speed += 4;

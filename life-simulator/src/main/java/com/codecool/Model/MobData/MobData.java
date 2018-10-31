@@ -13,12 +13,17 @@ public abstract class MobData {
     int damage = 1;
     private String breed;
     String[] foodList;
+    private String asText;
 
-
-    public MobData(Point position, String breed, Board board) {
+    public MobData(Point position, String breed, Board board, String text) {
         this.position = position;
         this.breed = breed;
         this.board = board;
+        this.asText = text;
+    }
+
+    public String getAsText() {
+        return asText;
     }
 
     public void dealDamage(int damage) {
