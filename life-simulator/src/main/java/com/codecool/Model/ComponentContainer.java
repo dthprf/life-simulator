@@ -2,82 +2,92 @@ package com.codecool.Model;
 
 import com.codecool.Model.MobData.MobData;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ComponentContainer {
 
-    private List<MobData> mobs;
-    private List<Resource> resources;
+    private final SynchronizedContainer container;
 
     public ComponentContainer(List<MobData> mobs, List<Resource> resources) {
-        this.mobs = mobs;
-        this.resources = resources;
+        this.container = new SynchronizedContainer(mobs, resources);
     }
 
     public void addMob(MobData mob) {
-        mobs.add(mob);
+        synchronized (container) {
+            container.addMob(mob);
+        }
     }
 
     public void removeMob(MobData mob) {
-        mobs.remove(mob);
+        synchronized (container) {
+            container.removeMob(mob);
+        }
     }
 
     public void addResource(Resource resource) {
-        resources.add(resource);
+        synchronized (container) {
+            container.addResource(resource);
+        }
     }
 
     public synchronized boolean removeResource(Resource resource) {
-        return resources.remove(resource);
+        synchronized (container) {
+            return container.removeResource(resource);
+        }
     }
 
     public synchronized Resource removeResourceOfType(String type) {
-        for (Resource resource : resources) {
-            if (resource.getName().equalsIgnoreCase(type)) {
-                resources.remove(resource);
-                return resource;
-            }
+        synchronized (container) {
+            return container.removeResourceOfType(type);
         }
-        return null;
     }
 
     public boolean hasMobs() {
-        return !mobs.isEmpty();
+        synchronized (container) {
+            return container.hasMobs();
+        }
     }
 
     public boolean hasMobsOfType(String breed) {
-        for (MobData mobData : this.mobs) {
-            if (mobData.getBreed().equals(breed)) {
-                return true;
-            }
+        synchronized (container) {
+            return container.hasMobsOfType(breed);
         }
-        return false;
     }
 
     public boolean hasResourceOfType(String name) {
-        for (Resource resource : this.resources) {
-            if (resource.getName().equals(name)) {
-                return true;
-            }
+        synchronized (container) {
+            return container.hasResourceOfType(name);
         }
-        return false;
+    }
+
+    public MobData getBestPrey(MobData hunter) {
+        synchronized (container) {
+            return container.getBestPrey(hunter);
+        }
     }
 
     public List<MobData> getMobs() {
-        return mobs;
+        synchronized (container) {
+            return container.getMobs();
+        }
+    }
+
+    public Resource getBestFood(String[] foodList) {
+        synchronized (container) {
+            return container.getBestFood(foodList);
+        }
     }
 
     public List<Resource> getResources() {
-        return resources;
+        synchronized (container) {
+            return container.getResources();
+        }
     }
 
     public String asChar() {
-        if (mobs.isEmpty() && resources.isEmpty()) {
-            return " ";
-        }
-        if (!mobs.isEmpty()) {
-            return String.valueOf(mobs.get(0).getBreed().charAt(0)).toUpperCase();
-        } else {
-            return String.valueOf(resources.get(0).getName().charAt(0)).toLowerCase();
-        }
+        return container.asChar();
     }
 }
