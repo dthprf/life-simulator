@@ -39,7 +39,9 @@ public class ConsoleView implements Runnable {
 
     private String stringifyBoard() {
         StringBuilder builder = new StringBuilder("\n");
+        builder.append(Thread.activeCount());
         builder.append(boardSeparator(board));
+        builder.append("\n");
         int lastY = sortedBoardKeys.get(0).getY();
         for (Point p : sortedBoardKeys) {
             if (p.getY() != lastY) {
