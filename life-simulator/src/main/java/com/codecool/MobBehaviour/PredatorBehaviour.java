@@ -170,5 +170,13 @@ public class PredatorBehaviour implements MobBehaviour {
         }
     }
 
+    private boolean attackMob(MobData pray) {
+        if (pray != null) {
+            pray.dealDamage(mobData.getDamage());
+            return true;
+        }
+        return false;
+    }
+
 
 }
