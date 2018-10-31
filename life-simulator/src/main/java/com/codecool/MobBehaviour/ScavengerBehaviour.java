@@ -39,14 +39,14 @@ public class ScavengerBehaviour extends Mob implements MobBehaviour {
             reproduce();
         }
 
-        if (target == null) {
-            List<Point> dangerPoints = predatorsNearby();
-            if (!dangerPoints.isEmpty()) {
-                handleDangerousSituation(dangerPoints);
-            } else {
-                stayInPlace();
-            }
+        List<Point> dangerPoints = predatorsNearby();
+        if (!dangerPoints.isEmpty()) {
+            handleDangerousSituation(dangerPoints);
         } else {
+            stayInPlace();
+        }
+
+        if (target != null) {
             if (target.equals(mobData.getPosition())) {
                 stayInPlace();
             } else {
