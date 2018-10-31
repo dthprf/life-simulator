@@ -16,7 +16,7 @@ import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class PredatorBehaviour implements MobBehaviour {
+public class PredatorBehaviour extends Mob implements MobBehaviour {
     private final MobFactory factory;
     private final MobData mobData;
     private final String PREDATOR_MOB = "predator";
@@ -103,23 +103,7 @@ public class PredatorBehaviour implements MobBehaviour {
     }
 
     private void moveTowardsTarget(Point target) {
-        int nextX = mobData.getPosition().getX();
-        int nextY = mobData.getPosition().getY();
-        if (nextX < target.getX()) {
-            nextX++;
-        } else if (nextX > target.getX()) {
-            nextX--;
-        }
-
-        if (nextY < target.getY()) {
-            nextY++;
-        } else if (nextY > target.getY()) {
-            nextY--;
-        }
-
-        Point nextPosition = new Point(nextX, nextY);
-        mobData.getBoard().moveToPosition(mobData, nextPosition);
-        mobData.decreaseEnergy(2);
+        moveToPoint(mobData, target);
     }
 
     private Point chooseRandomDirection() {

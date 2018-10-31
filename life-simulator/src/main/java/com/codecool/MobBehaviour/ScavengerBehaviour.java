@@ -12,7 +12,7 @@ import com.codecool.Model.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ScavengerBehaviour implements MobBehaviour {
+public class ScavengerBehaviour extends Mob implements MobBehaviour {
 
     private final MobFactory factory;
     private final MobData mobData;
@@ -115,7 +115,7 @@ public class ScavengerBehaviour implements MobBehaviour {
     }
 
     private boolean attackWeakPredators(List<Point> dangerPoints) {
-        int myDamage = mobData.getDamage() + 10;
+        int myDamage = mobData.getDamage();
         boolean attacked = false;
         for (Point point : dangerPoints) {
             ComponentContainer container = mobData.getBoard().getBoard().get(point);
@@ -125,6 +125,7 @@ public class ScavengerBehaviour implements MobBehaviour {
                 }
                 if (otherMob.getHealth() <= myDamage) {
                     otherMob.dealDamage(myDamage);
+                    System.out.println("ATTACK MOB");
                     attacked = true;
                     this.mobData.decreaseEnergy(2);
                 }
@@ -160,34 +161,8 @@ public class ScavengerBehaviour implements MobBehaviour {
         }
     }
 
-    private void collectResource(Point point, Resource resource) {
-        if (resource == null) {
-            return;
-        }
-        boolean foundFood = this.mobData.getBoard().getBoard().get(point).removeResource(resource);
-        if (foundFood) {
-            this.mobData.increaseEnergy(resource.getEnergy());
-        }
-    }
-
     private void moveTowardsTarget() {
-        int nextX = mobData.getPosition().getX();
-        int nextY = mobData.getPosition().getY();
-        if (nextX < target.getX()) {
-            nextX++;
-        } else if (nextX > target.getX()) {
-            nextX--;
-        }
-
-        if (nextY < target.getY()) {
-            nextY++;
-        } else if (nextY > target.getY()) {
-            nextY--;
-        }
-
-        Point nextPosition = new Point(nextX, nextY);
-        mobData.getBoard().moveToPosition(mobData, nextPosition);
-        mobData.decreaseEnergy(2);
+        moveToPoint(mobData, target);
     }
 
     private void stayInPlace() {
