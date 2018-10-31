@@ -1,5 +1,6 @@
 package com.codecool.MobBehaviour;
 
+import com.codecool.Constant.MobTypes;
 import com.codecool.Exception.UnrecognizedMobBreedException;
 import com.codecool.Factory.MobFactory;
 import com.codecool.Model.ComponentContainer;
@@ -82,10 +83,8 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
             List<Point> closestFields = getFieldsInRange(i, lineOfSight);
 
             for (Point point : closestFields) {
-                if (!getComponent(point).getMobs().stream()
-                        .filter(mob -> !mobData.getBreed().equals(mob.getBreed()))
-                        .collect(Collectors.toList())
-                        .isEmpty()) {
+                ComponentContainer container = getComponent(point);
+                if (container.hasMobsOfType(MobTypes.HERBIVORE_MOB) || container.hasMobsOfType(MobTypes.SCAVENGER_MOB)) {
                     actionsQueue.offer(proposeHunting(point, getComponent(point), i));
                 }
 
@@ -124,7 +123,7 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
     }
 
     private PredatorAction proposeHunting(Point point, ComponentContainer container, int distance) {
-        MobData bestPray = chooseBestPray(container.getMobs());
+        MobData bestPray = container.getBestPrey(mobData);
         return new PredatorAction(bestPray, distance, point);
     }
 
@@ -136,20 +135,15 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
     }
 
     private PredatorAction proposeFoodCollecting(Point point, ComponentContainer container, int distance) {
-        Resource bestFoodOption = chooseBestFood(container.getResources());
+        Resource bestFoodOption = container.getBestFood(mobData.getFoodList());
         return new PredatorAction(bestFoodOption, distance, point);
-    }
-
-
-    private Resource chooseBestFood(List<Resource> availableFood) {
-        return Collections.max(availableFood, Comparator.comparing(c -> c.getEnergy()));
     }
 
     private void proceedInstantAction(PredatorAction action) {
         ComponentContainer targetContainer = getComponent(action.getCoordinate());
 
         if (action.getActionType().equals(ATTACK_MOB)) {
-            MobData target = chooseBestPray(targetContainer.getMobs());
+            MobData target = targetContainer.getBestPrey(mobData);
             isMoveDone = attackMob(target);
 
         } else if (action.getActionType().equals(COLLECT_FOOD)) {

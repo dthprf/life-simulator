@@ -14,7 +14,7 @@ public class PredatorAction {
     public PredatorAction(Resource resource, int distance, Point coordinate) {
         this.actionType = COLLECT_FOOD;
         this.distance = distance;
-        this.energyIncome = resource.getEnergy();
+        this.energyIncome = resource == null ? 0 : resource.getEnergy();
         this.coordinate = coordinate;
     }
 
@@ -46,9 +46,6 @@ public class PredatorAction {
     }
 
     public boolean isActionInstant() {
-        if (distance <= 1) {
-            return true;
-        }
-        return false;
+        return distance <= 1;
     }
 }
