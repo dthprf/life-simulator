@@ -144,17 +144,24 @@ public class HerbivoreBehaviour implements MobBehaviour{
 
     private void eat(List<Point> reachZone) {
         for(Point point: reachZone) {
-            if(mobData.getBoard().getBoard().get(point).hasResourceOfType("water") ||
-                  mobData.getBoard().getBoard().get(point).hasResourceOfType("herb")) {
-                List<Resource> resources = mobData.getBoard().getBoard().get(point).getResources();
-                Resource resource = resources.stream()
-                        .filter(r -> r.getName().equals("water") || r.getName().equals("herb"))
-                        .findFirst().get();
-                collectResource(point, resource);
-            }
+            eat(point);
         }
     }
 
+    private void eat(Point position) {
+        ComponentContainer container = mobData.getBoard().getBoard().get(position);
+        collectResource(container);
+    }
+
+    private void collectResource(ComponentContainer container) {
+        for (String foodType : mobData.getFoodList()) {
+            Resource resource = container.removeResourceOfType(foodType);
+            if (resource != null) {
+                mobData.increaseEnergy(resource.getEnergy());
+                break;
+            }
+        }
+    }
     private boolean isSurroundingSafe(List<Point> surrounding) {
         surrounding.remove(this.mobData.getPosition());
         for(Point point: surrounding) {
