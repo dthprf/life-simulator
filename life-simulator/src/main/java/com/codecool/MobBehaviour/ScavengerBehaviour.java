@@ -9,6 +9,7 @@ import com.codecool.Model.MobData.MobData;
 import com.codecool.Model.Point;
 import com.codecool.Model.Resource;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -180,6 +181,7 @@ public class ScavengerBehaviour extends Mob implements MobBehaviour {
         Board board = mobData.getBoard();
         int SIGHT_RANGE = 7;
         List<Point> sightZone = board.adjacentPoints(currentPosition, SIGHT_RANGE);
+        Collections.shuffle(sightZone);
         for (Point point : sightZone) {
             if (target != null) {
                 break;
