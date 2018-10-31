@@ -178,5 +178,15 @@ public class PredatorBehaviour implements MobBehaviour {
         return false;
     }
 
+    private boolean collectResource(Point point, Resource resource) {
+        if (resource != null) {
+            this.mobData.getBoard().getBoard().get(point).removeResource(resource);
+            this.mobData.increaseEnergy(resource.getEnergy());
+            return true;
+        }
+        return false;
+
+    }
+
 
 }
