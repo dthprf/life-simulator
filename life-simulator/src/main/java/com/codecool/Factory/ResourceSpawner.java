@@ -40,21 +40,21 @@ public class ResourceSpawner extends Thread {
     }
 
     public void spawnCarrion(Point position, int energy) {
-        Resource carrion = new Resource(energy, "carrion");
+        Resource carrion = new Resource(energy, "carrion", "\uD83C\uDF56");
         board.spawnResource(carrion, position);
     }
 
     public void spawnMeat(Point position, int energy) {
-        Resource meat = new Resource(energy, "meat");
+        Resource meat = new Resource(energy, "meat", "\uD83C\uDF57");
         board.spawnResource(meat, position);
     }
 
     private List<Resource> generateResources() {
         List<Resource> resources = new ArrayList<>();
-        Resource herb = new Resource(5, "herb");
-        Resource carrion = new Resource(7, "carrion");
-        Resource meat = new Resource(10, "meat");
-        Resource water = new Resource(20, "water");
+        Resource herb = new Resource(5, "herb", "\uD83C\uDF3F");
+        Resource carrion = new Resource(7, "carrion", "\uD83C\uDF56");
+        Resource meat = new Resource(10, "meat",  "\uD83C\uDF57");
+        Resource water = new Resource(20, "water", "\uD83D\uDEB0");
 
         // herb has ~42% chance of spawning
         resources.add(herb);
