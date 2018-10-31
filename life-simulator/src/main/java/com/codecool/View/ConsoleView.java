@@ -59,7 +59,6 @@ public class ConsoleView implements Runnable {
     }
 
     private void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        System.out.println(new String(new char[board.getHeight()]).replace("\0", "\n"));
     }
 }
