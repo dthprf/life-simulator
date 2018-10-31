@@ -199,5 +199,9 @@ public class PredatorBehaviour implements MobBehaviour {
                 .filter(point -> countDistance(point, mobData.getPosition()) == range).collect(Collectors.toList());
     }
 
+    private int countDistance(Point target, Point point) {
+        double distance = Math.hypot((target.getX() - point.getX()), (target.getY() - point.getY()));
 
+        return (int) Math.round(distance);
+    }
 }
