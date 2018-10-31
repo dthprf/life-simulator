@@ -194,5 +194,10 @@ public class PredatorBehaviour implements MobBehaviour {
                 .collect(Collectors.toList());
     }
 
+    private List<Point> getFieldsInRange(int range, List<Point> lineOfSight) {
+        return lineOfSight.stream()
+                .filter(point -> countDistance(point, mobData.getPosition()) == range).collect(Collectors.toList());
+    }
+
 
 }
