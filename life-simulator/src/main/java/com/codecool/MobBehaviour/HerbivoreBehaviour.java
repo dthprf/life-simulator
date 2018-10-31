@@ -8,7 +8,6 @@ import com.codecool.Model.MobData.MobData;
 import com.codecool.Model.Point;
 import com.codecool.Model.Resource;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -17,6 +16,8 @@ public class HerbivoreBehaviour implements MobBehaviour{
 
     private final MobFactory factory;
     private final MobData mobData;
+    private final int SIGHT_DISTANCE = 7;
+    private final int REQUIRED_ENERGY_TO_REPRODUCE = 120;
     private Point target;
 
     public HerbivoreBehaviour(MobFactory factory, MobData mobData) {
@@ -29,8 +30,12 @@ public class HerbivoreBehaviour implements MobBehaviour{
         List<Point> reachZone = mobData.getBoard().adjacentPoints(mobData.getPosition(), 1);
 
         validateTarget();
-        if(target != null && reachZone.contains(this.target)) {
+        if(target != null && isTargetContainsFood(this.target)) {
             eat(reachZone);
+            setTarget(mobData.getPosition());
+        }
+        if (this.mobData.getEnergy() >= REQUIRED_ENERGY_TO_REPRODUCE) {
+            reproduce();
         }
         goToTarget();
     }
@@ -38,7 +43,9 @@ public class HerbivoreBehaviour implements MobBehaviour{
     private void validateTarget() {
         if(this.target != null) {
             updateTarget();
-        } else {
+        }
+
+        if(this.target == null) {
             setTarget(mobData.getPosition());
         }
     }
@@ -50,55 +57,43 @@ public class HerbivoreBehaviour implements MobBehaviour{
     }
 
     private void setTarget(Point point) {
-        List<Point> reachZone = mobData.getBoard().adjacentPoints(point, 1);
-
-        this.target = searchForTargetInBetweenReachAndSight(point, reachZone);
+        this.target = searchForTargetInDistanceArea(point, SIGHT_DISTANCE);
 
         if(this.target == null) {
-            List<Point> reachPlusOne = mobData.getBoard().adjacentPoints(point, 2);
-            this.target = searchForTargetOnSightArea(point, reachPlusOne);
-        }
-
-        if(this.target == null) {
-            setRandomTarget();
+            setRandomTarget(point);
         }
     }
 
-    private void setRandomTarget() {
+    private void setRandomTarget(Point point) {
+        List<Point> reachZone = mobData.getBoard().adjacentPoints(point, 1);
         Random random = new Random();
 
-        int nextX;
-        int nextY;
+        int randomIndex = random.nextInt(reachZone.size());
 
-        nextX = random.nextInt(3) - 1;
-        nextY = random.nextInt(3) - 1;
-
-        this.target = new Point(nextX, nextY);
+        this.target = reachZone.get(randomIndex);
     }
 
-    private Point searchForTargetOnSightArea(Point point, List<Point> reachPlusOne) {
-        List<Point> sightArea = mobData.getBoard().adjacentPoints(point, 3);
-        sightArea.removeIf(p -> reachPlusOne.contains(p));
+    private Point searchForTargetInDistanceArea(Point point, int distance) {
+        for(int i = 1; i <= distance; i++) {
 
-        sightArea = getResourcePointsInZone(sightArea);
+            List<Point> distanceArea = mobData.getBoard().adjacentPoints(point, i);
 
-        for(Point p: sightArea) {
-            List<Point> surrounding = mobData.getBoard().adjacentPoints(p, 1);
-            if(isSurroundingSafe(surrounding)) {
-                return p;
+            if(i < 2) {
+                List<Point> insideDistanceZone = mobData.getBoard().adjacentPoints(point, i - 1);
+                distanceArea.removeIf(p -> insideDistanceZone.contains(p));
+            }
+
+            distanceArea = getResourcePointsInZone(distanceArea);
+            Point target = getTarget(distanceArea);
+            if(target != null) {
+                return target;
             }
         }
         return null;
     }
 
-    private Point searchForTargetInBetweenReachAndSight(Point point, List<Point> reachZone) {
-        List<Point> betweenSightAndReach = mobData.getBoard().adjacentPoints(point, 2);
-        betweenSightAndReach.removeIf(p -> reachZone.contains(p));
-
-        betweenSightAndReach = getResourcePointsInZone(betweenSightAndReach);
-
-
-        for(Point p: betweenSightAndReach) {
+    private Point getTarget(List<Point> distanceArea) {
+        for(Point p: distanceArea) {
             List<Point> surrounding = mobData.getBoard().adjacentPoints(p, 1);
             if(isSurroundingSafe(surrounding)) {
                 return p;
@@ -148,7 +143,6 @@ public class HerbivoreBehaviour implements MobBehaviour{
     }
 
     private void eat(List<Point> reachZone) {
-
         for(Point point: reachZone) {
             if(mobData.getBoard().getBoard().get(point).hasResourceOfType("water") ||
                   mobData.getBoard().getBoard().get(point).hasResourceOfType("herb")) {
@@ -173,21 +167,11 @@ public class HerbivoreBehaviour implements MobBehaviour{
     }
 
     private List<Point> getResourcePointsInZone(List<Point> zone) {
-        List<Point> resourcePoints = zone.stream()
+        return zone.stream()
                 .filter(p -> (this.mobData.getBoard().getBoard().get(p).hasResourceOfType("water")
                 || this.mobData.getBoard().getBoard().get(p).hasResourceOfType("herb")))
                 .collect(Collectors.toList());
-
-        return resourcePoints;
     }
-//
-//    private List<Point> getDangerPointsInZone(List<Point> zone) {
-//        List<Point> dangerPoints = zone.stream()
-//                .filter(p -> this.mobData.getBoard().getBoard().get(p).hasMobsOfType("predator"))
-//                .collect(Collectors.toList());
-//
-//        return dangerPoints;
-//    }
 
     private void collectResource(Point point, Resource resource) {
         if (resource == null) {
