@@ -18,7 +18,7 @@ public class ScavengerBehaviour extends Mob implements MobBehaviour {
     private final MobFactory factory;
     private final MobData mobData;
     private Point target;
-    private final int REQUIRED_ENERGY_TO_REPRODUCE = 120;
+    private final int REQUIRED_ENERGY_TO_REPRODUCE = 160;
 
     public ScavengerBehaviour(MobFactory factory, MobData mobData) {
         this.factory = factory;
@@ -27,7 +27,6 @@ public class ScavengerBehaviour extends Mob implements MobBehaviour {
 
     @Override
     public void update() {
-        System.out.println(mobData.getEnergy());
         validateTarget();
         if (target == null) {
             updateTarget();
@@ -60,6 +59,7 @@ public class ScavengerBehaviour extends Mob implements MobBehaviour {
         boolean attacked = attackWeakPredators(dangerPoints);
         if (!attacked) {
             runAway(dangerPoints);
+            updateTarget();
         }
     }
 
@@ -127,7 +127,6 @@ public class ScavengerBehaviour extends Mob implements MobBehaviour {
                 }
                 if (otherMob.getHealth() <= myDamage) {
                     otherMob.dealDamage(myDamage);
-                    System.out.println("ATTACK MOB");
                     attacked = true;
                     this.mobData.decreaseEnergy(2);
                 }
@@ -139,7 +138,7 @@ public class ScavengerBehaviour extends Mob implements MobBehaviour {
     private List<Point> predatorsNearby() {
         Point currentPosition = mobData.getPosition();
         Board board = mobData.getBoard();
-        int DANGER_ZONE = 1;
+        int DANGER_ZONE = 2;
         List<Point> sightZone = board.adjacentPoints(currentPosition, DANGER_ZONE);
 
         return sightZone.stream()
@@ -178,10 +177,25 @@ public class ScavengerBehaviour extends Mob implements MobBehaviour {
 
 
     private void updateTarget() {
+        int AT_CLOSE_RANGE = 2;
+        int OK_RANGE = 6;
+        int SIGHT_RANGE = 10;
+        updateTargetInRange(AT_CLOSE_RANGE);
+        if (target != null) {
+            return;
+        }
+        updateTargetInRange(OK_RANGE);
+
+        if (target != null) {
+            return;
+        }
+        updateTargetInRange(SIGHT_RANGE);
+    }
+
+    private void updateTargetInRange(int range) {
         Point currentPosition = mobData.getPosition();
         Board board = mobData.getBoard();
-        int SIGHT_RANGE = 10;
-        List<Point> sightZone = board.adjacentPoints(currentPosition, SIGHT_RANGE);
+        List<Point> sightZone = board.adjacentPoints(currentPosition, range);
         Collections.shuffle(sightZone);
         for (Point point : sightZone) {
             if (target != null) {

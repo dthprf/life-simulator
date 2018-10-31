@@ -9,8 +9,6 @@ import com.codecool.Model.Point;
 import com.codecool.Model.PredatorAction;
 import com.codecool.Model.Resource;
 
-import java.util.Comparator;
-import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -19,7 +17,6 @@ import java.util.stream.Collectors;
 public class PredatorBehaviour extends Mob implements MobBehaviour {
     private final MobFactory factory;
     private final MobData mobData;
-    private final String PREDATOR_MOB = "predator";
     private final int VIEW_DISTANCE = 10;
     private final String COLLECT_FOOD = "collect";
     private final String ATTACK_MOB = "attack";
@@ -32,7 +29,6 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
 
     @Override
     public void update() {
-        System.out.println(mobData.getEnergy());
         PriorityQueue<PredatorAction> actionsQueue = queueEfficientActions();
 
         while (!isMoveDone) {
@@ -56,7 +52,6 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
             }
         }
         isMoveDone = false;
-        return;
     }
 
 
@@ -66,7 +61,7 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
         int energyAfterReproduce = mobData.getEnergy() / 2;
 
         try {
-            factory.spawnMob(currentPosition, energyAfterReproduce, PREDATOR_MOB);
+            factory.spawnMob(currentPosition, energyAfterReproduce, MobTypes.PREDATOR_MOB);
             mobData.setEnergy(energyAfterReproduce);
 
         } catch (UnrecognizedMobBreedException e) {
@@ -127,13 +122,6 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
         return new PredatorAction(bestPray, distance, point);
     }
 
-    private MobData chooseBestPray(List<MobData> allMobs) {
-
-        List<MobData> availableMobs = allMobs.parallelStream()
-                .filter(mob -> !mobData.getBreed().equals(mob.getBreed())).collect(Collectors.toList());
-        return Collections.max(availableMobs, Comparator.comparing(c -> c.getEnergy()));
-    }
-
     private PredatorAction proposeFoodCollecting(Point point, ComponentContainer container, int distance) {
         Resource bestFoodOption = container.getBestFood(mobData.getFoodList());
         return new PredatorAction(bestFoodOption, distance, point);
@@ -142,7 +130,6 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
     private void proceedInstantAction(PredatorAction action) {
         ComponentContainer targetContainer = getComponent(action.getCoordinate());
         if (action.getActionType().equals(COLLECT_FOOD)) {
-//            Resource target = chooseBestFood(targetContainer.getResources());
             isMoveDone = collectResource(getComponent(action.getCoordinate()));
         }
 

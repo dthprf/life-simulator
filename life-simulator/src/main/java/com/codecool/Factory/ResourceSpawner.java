@@ -28,8 +28,7 @@ public class ResourceSpawner extends Thread {
                 Thread.sleep(interval);
                 spawnResource();
             }
-        } catch (InterruptedException e) {
-            System.out.println("Spawner Stopped");
+        } catch (InterruptedException ignored) {
         }
     }
 
@@ -51,10 +50,10 @@ public class ResourceSpawner extends Thread {
 
     private List<Resource> generateResources() {
         List<Resource> resources = new ArrayList<>();
-        Resource herb = new Resource(5, "herb", "\uD83C\uDF3F");
-        Resource carrion = new Resource(7, "carrion", "\uD83C\uDF56");
-        Resource meat = new Resource(10, "meat",  "\uD83C\uDF57");
-        Resource water = new Resource(20, "water", "\uD83D\uDEB0");
+        Resource herb = new Resource(20, "herb", "\uD83C\uDF3F");
+        Resource carrion = new Resource(20, "carrion", "\uD83C\uDF56");
+        Resource meat = new Resource(30, "meat", "\uD83C\uDF57");
+        Resource water = new Resource(40, "water", "\uD83D\uDEB0");
 
         // herb has ~42% chance of spawning
         resources.add(herb);

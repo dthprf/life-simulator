@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class HerbivoreBehaviour implements MobBehaviour{
+public class HerbivoreBehaviour implements MobBehaviour {
 
     private final MobFactory factory;
     private final MobData mobData;
@@ -27,11 +27,10 @@ public class HerbivoreBehaviour implements MobBehaviour{
 
     @Override
     public void update() {
-        System.out.println(mobData.getEnergy());
         List<Point> reachZone = mobData.getBoard().adjacentPoints(mobData.getPosition(), 1);
 
         validateTarget();
-        if(target != null && isTargetContainsFood(this.target)) {
+        if (target != null && isTargetContainsFood(this.target)) {
             eat(reachZone);
             setTarget(mobData.getPosition());
         }
@@ -42,11 +41,11 @@ public class HerbivoreBehaviour implements MobBehaviour{
     }
 
     private void validateTarget() {
-        if(this.target != null) {
+        if (this.target != null) {
             updateTarget();
         }
 
-        if(this.target == null) {
+        if (this.target == null) {
             setTarget(mobData.getPosition());
         }
     }
@@ -60,7 +59,7 @@ public class HerbivoreBehaviour implements MobBehaviour{
     private void setTarget(Point point) {
         this.target = searchForTargetInDistanceArea(point, SIGHT_DISTANCE);
 
-        if(this.target == null) {
+        if (this.target == null) {
             setRandomTarget(point);
         }
     }
@@ -75,18 +74,18 @@ public class HerbivoreBehaviour implements MobBehaviour{
     }
 
     private Point searchForTargetInDistanceArea(Point point, int distance) {
-        for(int i = 1; i <= distance; i++) {
+        for (int i = 1; i <= distance; i++) {
 
             List<Point> distanceArea = mobData.getBoard().adjacentPoints(point, i);
 
-            if(i < 2) {
+            if (i < 2) {
                 List<Point> insideDistanceZone = mobData.getBoard().adjacentPoints(point, i - 1);
                 distanceArea.removeIf(p -> insideDistanceZone.contains(p));
             }
 
             distanceArea = getResourcePointsInZone(distanceArea);
             Point target = getTarget(distanceArea);
-            if(target != null) {
+            if (target != null) {
                 return target;
             }
         }
@@ -94,9 +93,9 @@ public class HerbivoreBehaviour implements MobBehaviour{
     }
 
     private Point getTarget(List<Point> distanceArea) {
-        for(Point p: distanceArea) {
+        for (Point p : distanceArea) {
             List<Point> surrounding = mobData.getBoard().adjacentPoints(p, 1);
-            if(isSurroundingSafe(surrounding)) {
+            if (isSurroundingSafe(surrounding)) {
                 return p;
             }
         }
@@ -105,7 +104,7 @@ public class HerbivoreBehaviour implements MobBehaviour{
 
     private void goToTarget() {
 
-        if(this.target.equals(mobData.getPosition())) {
+        if (this.target.equals(mobData.getPosition())) {
             stayInPlace();
         } else {
             int nextX = mobData.getPosition().getX();
@@ -135,8 +134,8 @@ public class HerbivoreBehaviour implements MobBehaviour{
     private boolean isTargetContainsFood(Point point) {
         ComponentContainer targetContainer = mobData.getBoard().getBoard().get(point);
 
-        for(Resource resource: targetContainer.getResources()) {
-            if(resource.getName().equals("water") || resource.getName().equals("herb")) {
+        for (Resource resource : targetContainer.getResources()) {
+            if (resource.getName().equals("water") || resource.getName().equals("herb")) {
                 return true;
             }
         }
@@ -144,7 +143,7 @@ public class HerbivoreBehaviour implements MobBehaviour{
     }
 
     private void eat(List<Point> reachZone) {
-        for(Point point: reachZone) {
+        for (Point point : reachZone) {
             eat(point);
         }
     }
@@ -163,10 +162,11 @@ public class HerbivoreBehaviour implements MobBehaviour{
             }
         }
     }
+
     private boolean isSurroundingSafe(List<Point> surrounding) {
         surrounding.remove(this.mobData.getPosition());
-        for(Point point: surrounding) {
-            if(this.mobData.getBoard().getBoard().get(point)
+        for (Point point : surrounding) {
+            if (this.mobData.getBoard().getBoard().get(point)
                     .hasMobsOfType("predator")) {
                 return false;
             }
@@ -177,18 +177,8 @@ public class HerbivoreBehaviour implements MobBehaviour{
     private List<Point> getResourcePointsInZone(List<Point> zone) {
         return zone.stream()
                 .filter(p -> (this.mobData.getBoard().getBoard().get(p).hasResourceOfType("water")
-                || this.mobData.getBoard().getBoard().get(p).hasResourceOfType("herb")))
+                        || this.mobData.getBoard().getBoard().get(p).hasResourceOfType("herb")))
                 .collect(Collectors.toList());
-    }
-
-    private void collectResource(Point point, Resource resource) {
-        if (resource == null) {
-            return;
-        }
-        boolean foundFood = this.mobData.getBoard().getBoard().get(point).removeResource(resource);
-        if (foundFood) {
-            this.mobData.increaseEnergy(resource.getEnergy());
-        }
     }
 
     @Override

@@ -12,8 +12,8 @@ public class App {
 
     private static final int WIDTH = 150;
     private static final int HEIGHT = 12;
-    private static final int RESOURCE_INTERVAL = 500;
-    private static final int VIEW_UPDATE_INTERVAL = 1000;
+    private static final int RESOURCE_INTERVAL = 100;
+    private static final int VIEW_UPDATE_INTERVAL = 800;
 
     public static void main(String[] args)  {
         BoardCreator boardCreator = new BoardCreator();
@@ -22,7 +22,7 @@ public class App {
         MobFactory mobFactory = new MobFactory(board, resourceSpawner);
         try {
             mobFactory.spawnMob(30, MobTypes.HERBIVORE_MOB);
-            mobFactory.spawnMob(10, MobTypes.PREDATOR_MOB);
+            mobFactory.spawnMob(5, MobTypes.PREDATOR_MOB);
             mobFactory.spawnMob(20, MobTypes.SCAVENGER_MOB);
         } catch (UnrecognizedMobBreedException e) {
             e.printStackTrace();

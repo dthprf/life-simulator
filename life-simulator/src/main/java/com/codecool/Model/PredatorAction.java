@@ -21,7 +21,7 @@ public class PredatorAction {
     public PredatorAction(MobData mob, int distance, Point coordinate) {
         this.actionType = ATTACK_MOB;
         this.distance = distance;
-        this.energyIncome = mob.getEnergy();
+        this.energyIncome = mob == null ? 0 : mob.getEnergy();
         this.coordinate = coordinate;
     }
 
