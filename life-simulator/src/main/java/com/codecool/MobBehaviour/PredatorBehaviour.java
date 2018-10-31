@@ -185,7 +185,13 @@ public class PredatorBehaviour implements MobBehaviour {
             return true;
         }
         return false;
+    }
 
+    private List<Resource> getValidFood(List<Resource> resources) {
+        List<String> foodList = Arrays.asList(mobData.getFoodList());
+        return resources.stream()
+                .filter(r -> foodList.contains(r.getName()))
+                .collect(Collectors.toList());
     }
 
 
