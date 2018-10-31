@@ -35,6 +35,7 @@ public class SynchronizedContainer {
 
     public synchronized Resource removeResourceOfType(String type) {
         for (Resource resource : resources) {
+            System.out.println(type + " " + resource.getName() + " " + (type.equalsIgnoreCase(resource.getName())));
             if (resource.getName().equalsIgnoreCase(type)) {
                 resources.remove(resource);
                 return resource;
@@ -99,7 +100,9 @@ public class SynchronizedContainer {
 
     public Resource getBestFood(String[] foodList) {
         for(String food : foodList) {
-            Resource r = removeResourceOfType(food);
+            Resource r = resources.stream()
+                    .filter(resource -> resource.getName().equalsIgnoreCase(food))
+                    .findFirst().get();
             if (r != null) {
                 return r;
             }
