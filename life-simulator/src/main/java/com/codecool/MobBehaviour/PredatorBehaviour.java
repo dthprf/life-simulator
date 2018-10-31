@@ -9,7 +9,6 @@ import com.codecool.Model.Point;
 import com.codecool.Model.PredatorAction;
 import com.codecool.Model.Resource;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +20,7 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
     private final MobFactory factory;
     private final MobData mobData;
     private final String PREDATOR_MOB = "predator";
-    private final int VIEW_DISTANCE = 7;
+    private final int VIEW_DISTANCE = 10;
     private final String COLLECT_FOOD = "collect";
     private final String ATTACK_MOB = "attack";
     private boolean isMoveDone = false;
@@ -33,6 +32,7 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
 
     @Override
     public void update() {
+        System.out.println(mobData.getEnergy());
         PriorityQueue<PredatorAction> actionsQueue = queueEfficientActions();
 
         while (!isMoveDone) {
@@ -141,30 +141,22 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
 
     private void proceedInstantAction(PredatorAction action) {
         ComponentContainer targetContainer = getComponent(action.getCoordinate());
+        if (action.getActionType().equals(COLLECT_FOOD)) {
+//            Resource target = chooseBestFood(targetContainer.getResources());
+            isMoveDone = collectResource(getComponent(action.getCoordinate()));
+        }
 
         if (action.getActionType().equals(ATTACK_MOB)) {
             MobData target = targetContainer.getBestPrey(mobData);
             isMoveDone = attackMob(target);
 
-        } else if (action.getActionType().equals(COLLECT_FOOD)) {
-//            Resource target = chooseBestFood(targetContainer.getResources());
-            isMoveDone = collectResource(getComponent(action.getCoordinate()));
         }
     }
 
     private boolean attackMob(MobData pray) {
         if (pray != null) {
             pray.dealDamage(mobData.getDamage());
-            mobData.decreaseEnergy(4);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean collectResource(Point point, Resource resource) {
-        if (resource != null) {
-            this.mobData.getBoard().getBoard().get(point).removeResource(resource);
-            this.mobData.increaseEnergy(resource.getEnergy());
+            mobData.decreaseEnergy(3);
             return true;
         }
         return false;
@@ -173,20 +165,12 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
     private boolean collectResource(ComponentContainer container) {
         for (String foodType : mobData.getFoodList()) {
             Resource resource = container.removeResourceOfType(foodType);
-
             if (resource != null) {
                 mobData.increaseEnergy(resource.getEnergy());
                 return true;
             }
         }
-        return false;
-    }
-
-    private List<Resource> getValidFood(List<Resource> resources) {
-        List<String> foodList = Arrays.asList(mobData.getFoodList());
-        return resources.stream()
-                .filter(r -> foodList.contains(r.getName()))
-                .collect(Collectors.toList());
+        return true;
     }
 
     private List<Point> getFieldsInRange(int range, List<Point> lineOfSight) {

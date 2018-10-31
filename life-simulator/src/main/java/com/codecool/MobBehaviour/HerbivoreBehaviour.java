@@ -16,8 +16,8 @@ public class HerbivoreBehaviour implements MobBehaviour{
 
     private final MobFactory factory;
     private final MobData mobData;
-    private final int SIGHT_DISTANCE = 7;
-    private final int REQUIRED_ENERGY_TO_REPRODUCE = 120;
+    private final int SIGHT_DISTANCE = 5;
+    private final int REQUIRED_ENERGY_TO_REPRODUCE = 105;
     private Point target;
 
     public HerbivoreBehaviour(MobFactory factory, MobData mobData) {
@@ -27,6 +27,7 @@ public class HerbivoreBehaviour implements MobBehaviour{
 
     @Override
     public void update() {
+        System.out.println(mobData.getEnergy());
         List<Point> reachZone = mobData.getBoard().adjacentPoints(mobData.getPosition(), 1);
 
         validateTarget();

@@ -27,6 +27,7 @@ public class ScavengerBehaviour extends Mob implements MobBehaviour {
 
     @Override
     public void update() {
+        System.out.println(mobData.getEnergy());
         validateTarget();
         if (target == null) {
             updateTarget();
