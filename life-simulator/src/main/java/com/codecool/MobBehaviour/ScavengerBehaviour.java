@@ -179,7 +179,7 @@ public class ScavengerBehaviour extends Mob implements MobBehaviour {
     private void updateTarget() {
         Point currentPosition = mobData.getPosition();
         Board board = mobData.getBoard();
-        int SIGHT_RANGE = 7;
+        int SIGHT_RANGE = 10;
         List<Point> sightZone = board.adjacentPoints(currentPosition, SIGHT_RANGE);
         Collections.shuffle(sightZone);
         for (Point point : sightZone) {
