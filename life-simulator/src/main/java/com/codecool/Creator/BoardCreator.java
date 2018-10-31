@@ -7,6 +7,7 @@ import com.codecool.Model.Point;
 import com.codecool.Model.Resource;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,8 +19,8 @@ public class BoardCreator {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 Point key = new Point(x, y);
-                List<MobData> mobData = new ArrayList<>();
-                List<Resource> resources = new ArrayList<>();
+                List<MobData> mobData = Collections.synchronizedList(new ArrayList<>());
+                List<Resource> resources = Collections.synchronizedList(new ArrayList<>());
                 ComponentContainer container = new ComponentContainer(mobData, resources);
                 board.put(key, container);
             }

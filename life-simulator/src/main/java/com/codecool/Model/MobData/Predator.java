@@ -6,8 +6,9 @@ import com.codecool.Model.Point;
 public class Predator extends MobData {
     public Predator(Point position, String breed, Board board) {
         super(position, breed, board);
+        this.health += 1;
         this.damage += 5;
-        this.speed += 5;
-        this.foodList = new String[]{"water", "meat", "herbivore"};
+        this.speed += 4;
+        this.foodList = new String[]{"water", "meat"};
     }
 }

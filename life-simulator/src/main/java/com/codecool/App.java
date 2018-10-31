@@ -13,7 +13,7 @@ public class App {
     private static final int WIDTH = 150;
     private static final int HEIGHT = 12;
     private static final int RESOURCE_INTERVAL = 1000;
-    private static final int VIEV_UPDATE_INTERVAL = 1000;
+    private static final int VIEW_UPDATE_INTERVAL = 1000;
 
     public static void main(String[] args)  {
         BoardCreator boardCreator = new BoardCreator();
@@ -29,7 +29,7 @@ public class App {
         }
 
         resourceSpawner.start();
-        ConsoleView view = new ConsoleView(board, VIEV_UPDATE_INTERVAL);
+        ConsoleView view = new ConsoleView(board, VIEW_UPDATE_INTERVAL);
         Thread viewThread = new Thread(view);
         viewThread.start();
     }
