@@ -34,9 +34,14 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
         while (!isMoveDone) {
             PredatorAction action = actionsQueue.poll();
 
-            if (mobData.getEnergy() > 120) {
+            if (mobData.getEnergy() > 180) {
                 reproduce();
                 isMoveDone = true;
+            }
+
+            if (mobData.getEnergy() > 100) {
+                stayInPosition();
+                return;
             }
 
             if (action == null) {
@@ -83,8 +88,11 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
                     actionsQueue.offer(proposeHunting(point, getComponent(point), i));
                 }
 
-                if (!getComponent(point).getResources().isEmpty()) {
-                    actionsQueue.offer(proposeFoodCollecting(point, getComponent(point), i));
+                if (!container.getResources().isEmpty()) {
+                    PredatorAction action = proposeFoodCollecting(point, getComponent(point), i);
+                    if (action != null) {
+                        actionsQueue.offer(action);
+                    }
                 }
             }
         }
@@ -123,8 +131,11 @@ public class PredatorBehaviour extends Mob implements MobBehaviour {
     }
 
     private PredatorAction proposeFoodCollecting(Point point, ComponentContainer container, int distance) {
-        Resource bestFoodOption = container.getBestFood(mobData.getFoodList());
-        return new PredatorAction(bestFoodOption, distance, point);
+        Resource bestFoodOption = container.getBestFood(this.mobData.getFoodList());
+        if (bestFoodOption != null) {
+            return new PredatorAction(bestFoodOption, distance, point);
+        }
+        return null;
     }
 
     private void proceedInstantAction(PredatorAction action) {
